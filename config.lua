@@ -5,25 +5,10 @@ application = {
 		scale = "letterBox",
 		fps = 30,
 		
-		--[[
-        imageSuffix = {
-		    ["@2x"] = 2,
+		imageSuffix = {
+		    ["-hd"] = 2,
+            ["-ipad"] = 2,
+            ["-ipadhd"] = 4,
 		}
-		--]]
 	},
-
-    --[[
-    -- Push notifications
-
-    notification =
-    {
-        iphone =
-        {
-            types =
-            {
-                "badge", "sound", "alert", "newsstand"
-            }
-        }
-    }
-    --]]    
 }

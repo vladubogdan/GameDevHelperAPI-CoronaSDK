@@ -11,8 +11,13 @@ local testCaseInfo = "Demonstrate loading sprites using pure Corona SDK code fro
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
 
+
+local localGroup = nil;
+
 function scene:createScene( event )
 	local group = self.view
+    
+    localGroup = group;
 
     local multiText = display.newText( testCaseInfo, display.contentWidth/10, 0, display.contentWidth - display.contentWidth/5, display.contentHeight/2, "Helvetica", 12 )
     multiText:setReferencePoint(display.CenterReferencePoint)
@@ -23,13 +28,13 @@ function scene:createScene( event )
     backButton:setTextColor(255, 255, 255, 255)
     backButton:setReferencePoint(display.TopLeftReferencePoint)
     backButton.x = 0;
-    backButton.y = -10;
+    backButton.y = 0;
  
     backButton:addEventListener("tap", function()
             storyboard.gotoScene("menu")
         end)
     group:insert(backButton);
-    
+
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -55,6 +60,50 @@ function scene:destroyScene( event )
 	--package.loaded[physics] = nil
 	--physics = nil
 end
+
+local currentSprite = 1;
+local createSpriteAtLocation = function(x, y)
+
+    local spriteFrameNames = {
+            "backpack", "banana", "bananabunch", "canteen", "hat", "pineapple", "statue" }
+
+    local spriteName = spriteFrameNames[currentSprite];
+    --YOU SHOULD LOOK AT config.lua to see how image suffixes are setup for dynamic content scaling.
+
+    -- require the sprite sheet information file
+    local sheetInfo = require("Assets.loadSprites_spritesSheet"); --the folder "Assets" and the lua file exported by SpriteHelper "loadSprites_spritesSheet"
+    --create the image sheet
+    local imageSheet = graphics.newImageSheet( "Assets/loadSprites_spritesSheet.png", sheetInfo.getSpriteSheetData() );
+    --create the sprite
+    
+    print("Did create sprite with name " .. spriteName .. " which has frame index " ..  sheetInfo.getFrameForName(spriteName));
+    local sprite = display.newImage(imageSheet, sheetInfo.getFrameForName(spriteName));
+    
+    localGroup:insert(sprite);
+    
+    sprite.x = x;
+    sprite.y = y;
+    
+    
+    
+    --test case related code to change the sprite that will be created on next click
+    currentSprite = currentSprite+1;
+    if(currentSprite > #spriteFrameNames)then
+        currentSprite = 1;
+    end
+end
+
+
+local touchListener = function( event ) 
+    if(event.phase == "began")then
+        createSpriteAtLocation(event.x, event.y);
+    end
+    if(event.phase == "moved")then
+    end
+    
+end 
+Runtime:addEventListener( "touch", touchListener ) 
+
 
 -----------------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
