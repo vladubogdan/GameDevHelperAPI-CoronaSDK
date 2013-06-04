@@ -14,6 +14,7 @@ local links = {
 -- {'button label', 'director scene'}
         {'Sprites: Load sprites using Corona SDK','sprites_loadUsingCorona'},
         {'Physics: Load physical sprites','physics_loadPhysicalSprites'},
+        {'Physics: Collision Filtering','physics_collisionFiltering'},
         
 --        {'Sprites: Load sprites using GameDevHelper API','Scene2'},
 --        {'Physics: Load physical sprites','Scene3'},
