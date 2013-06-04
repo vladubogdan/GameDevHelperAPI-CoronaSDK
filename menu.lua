@@ -12,7 +12,9 @@ local scene = storyboard.newScene()
 ------------------------------------------------------------------------------------
 local links = {
 -- {'button label', 'director scene'}
-        {'Sprites: Load sprites using Corona SDK','Sprites_loadUsingCorona'},
+        {'Sprites: Load sprites using Corona SDK','sprites_loadUsingCorona'},
+        {'Physics: Load physical sprites','physics_loadPhysicalSprites'},
+        
 --        {'Sprites: Load sprites using GameDevHelper API','Scene2'},
 --        {'Physics: Load physical sprites','Scene3'},
 --        {'Physics: Collision Filtering','Scene4'},
