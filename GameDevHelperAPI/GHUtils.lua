@@ -144,6 +144,23 @@ function pointFromString(str)
 	string.gsub(str, "{(.*), (.*)}", pointHelper) 
 	return  { x = xStr, y = yStr}
 end
+
+--!@docBegin
+--!Copies a lua table by value
+function GHDeepCopy(t)
+--!@docEnd
+    if type(t) ~= 'table' then return t end
+        local mt = getmetatable(t)
+        local res = {}
+        for k,v in pairs(t) do
+            if type(v) == 'table' then
+            v = GHDeepCopy(v)
+        end
+        res[k] = v
+    end
+    setmetatable(res,mt)
+    return res
+end
 --------------------------------------------------------------------------------
 --function lh_sizeFromString(str)
 --

@@ -26,6 +26,7 @@ function createWithFile(imageFilePath, spriteName, base)
     
     local GHUtils = require("GameDevHelperAPI.GHUtils");
 
+    
 --create the actual sprite
     local spriteSheetPath = GHUtils.stripExtension(imageFilePath);
     spriteSheetPath = GHUtils.replaceOccuranceOfStringWithString( spriteSheetPath, "/", "." )
@@ -35,13 +36,37 @@ function createWithFile(imageFilePath, spriteName, base)
     --create the image sheet
     local imageSheet = graphics.newImageSheet( imageFilePath, sheetInfo.getSpriteSheetData() );
     --create the sprite
-    local GHSprite = display.newImage(imageSheet, sheetInfo.getFrameForName(spriteName));
+    --local GHSprite = display.newImage(imageSheet, sheetInfo.getFrameForName(spriteName));
     --here i call the local GHSprite only because i want the documentation parser to know where to add this method
     --i could have called it in any way.
+    
+    local imageFile = GHUtils.getFileFromFilename(imageFilePath);
+    -- consecutive frames
+    local sequenceData = {
+        name=imageFile,
+        start=1,
+        count=sheetInfo.getFramesCount()
+    }
+    local GHSprite = display.newSprite( imageSheet, sequenceData )
+
+    GHSprite:setFrame(sheetInfo.getFrameForName(spriteName));
+    GHSprite.frameNamesMap = GHUtils.GHDeepCopy(sheetInfo.getFrameNamesMap());
     
 --------------------------------------------------------------------------------    
 --------------------------------------------------------------------------------    
 --add GameDevHelper related methods to the sprite    
+
+--!@docBegin
+--!Set the texture rect coresponding to the frame name given. In other words, changes sprite representation with a new sprite.
+--!@param name A string value represeting the name of the sprite as defined in SpriteHelper. Note that the sprite name must be a sprite in the same sheet as current sprite. 
+--!User should only call this function if destroyBody was previously called.
+function GHSprite:setFrameName(name)
+--!@docEnd
+    local idx = self.frameNamesMap[name];
+    if(idx)then
+        self:setFrame(idx);
+    end
+end
 
 --!@docBegin
 --!Creates physical body on the sprite body. This function is called when creating the sprite.

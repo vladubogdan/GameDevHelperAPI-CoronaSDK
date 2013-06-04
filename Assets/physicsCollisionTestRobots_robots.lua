@@ -42,12 +42,20 @@ function getSpriteSheetData()
 	return options
 end
 
-function getFrameForName(name)
+function getFrameNamesMap()
 	local frameIndexes =
 	{
 		["blueRobot"] = 1,
 		["greenRobot"] = 2,
 		["pinkRobot"] = 3,
 	}
-	return frameIndexes[name];
+	return frameIndexes;
+end
+
+function getFramesCount()
+	return 3;
+end
+
+function getFrameForName(name)
+	return getFrameNamesMap()[name];
 end

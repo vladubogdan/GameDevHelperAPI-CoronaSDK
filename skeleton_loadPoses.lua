@@ -4,7 +4,7 @@ local scene = storyboard.newScene()
 local GHSkeleton = require("GameDevHelperAPI.GHSkeleton")
 
 --------------------------------------------
-local testCaseInfo = "Demonstrate loading a skeleton.\nTouch and drag to move the hand.";
+local testCaseInfo = "Demonstrate loading a skeleton and changing poses.\nTouch to change pose.";
 
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
@@ -12,7 +12,7 @@ local screenW, screenH, halfW = display.contentWidth, display.contentHeight, dis
 local localGroup = nil;
 
 function scene:createScene( event )
-	local group = self.view
+    local group = self.view
     
     localGroup = group;
 end
@@ -21,12 +21,18 @@ local skeleton = nil;
 
 local createSkeletonAtLocation = function(x, y)
 
+    
+    
     skeleton = GHSkeleton.createWithFile("Assets/skeletons/Officer_Officer.json");
     skeleton:setPosition(x, y);
     localGroup:insert(skeleton);
-        
+    
+    
 end
 
+local currentPose = 1;
+local posesNames = {
+            "DefaultPose", "BowPose", "DeathPose", "HatWave", "IdlePose", "PushPose", "ShootPose" }
 
 local function onScreenTouch( event ) 
     if(event.phase == "began")then
@@ -34,10 +40,17 @@ local function onScreenTouch( event )
             createSkeletonAtLocation(event.x, event.y);
         end
     end
-    if(event.phase == "moved")then
+    if(event.phase == "ended")then
         if(skeleton ~= nil)then
-            y = display.contentHeight - event.y;
-            skeleton:setPositionForBoneNamed(event.x, y, "rightHand");
+           
+            local poseToLoadName = posesNames[currentPose];
+            
+            skeleton:setPoseWithName(poseToLoadName);
+            
+            currentPose = currentPose+1;
+            if(currentPose > #posesNames)then
+                currentPose = 1;
+            end
         end
     end
 end 

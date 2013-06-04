@@ -78,7 +78,7 @@ function getSpriteSheetData()
 	return options
 end
 
-function getFrameForName(name)
+function getFrameNamesMap()
 	local frameIndexes =
 	{
 		["hat"] = 1,
@@ -89,5 +89,13 @@ function getFrameForName(name)
 		["bananabunch"] = 6,
 		["statue"] = 7,
 	}
-	return frameIndexes[name];
+	return frameIndexes;
+end
+
+function getFramesCount()
+	return 7;
+end
+
+function getFrameForName(name)
+	return getFrameNamesMap()[name];
 end

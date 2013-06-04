@@ -162,7 +162,8 @@ function GHSkeleton:loadSprites(spritesInfo, spriteAtlastFileName)
             local newSprite = GHSprite.createWithFile(spriteAtlastFileName, sprName);
 			
 			newSprite.name = skinName;
-			
+			newSprite.zOrder = i;
+            
 			newSprite.x = localPosX;
 			newSprite.y = -1*localPosY;
             newSprite.rotation = angle;
@@ -260,7 +261,162 @@ function GHSkeleton:getRootBone()
 --!@docEnd
     return self.rootBone;
 end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Sets a pose onto the skeleton given the pose name.
+--!@param poseName The name of the pose to be loaded.
+function GHSkeleton:setPoseWithName(poseName)
+--!@docEnd
+    if self.poses == nil then
+		print("ERROR: Skeleton has no poses or poses were not publish.");
+		return;
+	end
 
+	local poseInfo = self.poses[poseName];
+	if(poseInfo == nil)then
+		print("ERROR: Skeleton has no pose with name " .. poseName);
+		return;
+	end
+	
+	local visibility = poseInfo.visibility;
+	if(visibility == nil)then
+		print("ERROR: Skeleton pose is in wrong format. Skin visibilities were not found.");
+		return;
+	end
+	
+	local zOrder = poseInfo.zOrder;
+	if(zOrder == nil)then
+		print("ERROR: Skeleton pose is in wrong format. Skin z orders were not found.");
+		return;
+	end
+
+	local skinTex = poseInfo.skinTex;
+	if(skinTex == nil)then
+		print("ERROR: Skeleton pose is in wrong format. Skin sprite frame names were not found.");
+		return;
+	end
+
+	local connections = poseInfo.connections;
+	if(connections == nil)then
+		print("ERROR: Skeleton pose is in wrong format. Skin connections were not found.");
+		return;
+	end
+
+    local allBones = self:getAllBones();
+    
+    for s = 1, #self.skins do
+        
+		local skin = self.skins[s];
+		if skin then
+		
+			skin:getSprite().isVisible = true;
+			
+			local value = visibility[skin:getUUID()];
+			
+			if value == false then
+				skin:getSprite().isVisible = false;
+			end
+			
+			local zValue = zOrder[skin:getUUID()];
+			if(zValue)then
+				skin:getSprite().zOrder = zValue;
+			end
+            
+			local spriteFrameName = skinTex[skin:getUUID()];
+			if(spriteFrameName)then
+                skin:getSprite():setFrameName(spriteFrameName);
+			end
+			
+			
+			local connectionInfo = connections[skin:getUUID()];
+			if(connectionInfo)then
+			
+				--angleOff
+				--boneUUID //this may be missing if no connection
+				--conAngle
+				--posOff
+				
+				local boneUUID = connectionInfo.boneUUID;
+				
+				if(boneUUID)then
+				
+					--check if the current bone is already our connection bone - if not, change it
+					if(false == (skin:getBone() and skin:getBone():getUUID() == boneUUID))then
+					    
+                        for b = 1, #allBones do
+							local bone = allBones[b];
+							if(bone)then
+								if(bone:getUUID() == boneUUID)then
+									skin:setBone(bone);
+									break;
+								end
+							end
+						end
+					end	
+				else
+					skin:setBone(nil);	
+				end
+				
+				local angleOff = connectionInfo.angleOff;
+				if(angleOff)then
+					skin:setAngleOffset(angleOff);
+				end
+				
+				local posOff = connectionInfo.posOff;
+				if posOff then
+					local pos = GHUtils.pointFromString(posOff);
+   					if (pos) then
+	 					skin:setPositionOffset(pos.x, pos.y);
+					end
+				end
+				
+				local connectionAngle = connectionInfo.conAngle;
+				if connectionAngle then
+					skin:setConnectionAngle(connectionAngle);
+				end
+			end
+		end
+    end
+  
+    --sort sprites in order of z
+    table.sort(self, function(a,b) return a.zOrder < b.zOrder end)
+            
+
+    local positions = poseInfo.positions;
+    if(positions == nil)then
+        print("ERROR: Skeleton pose is in wrong format. Bone positions were not found.");
+        return;
+    end
+	
+    for j = 1, #allBones do
+        local cbone = allBones[j];
+        if(cbone)then
+		
+			local uuid = cbone:getUUID();
+			if(uuid == nil or uuid == "")then
+				print("ERROR: Bone has no UUID.");
+				return;
+			end
+			
+			local bonePos = positions[uuid];
+			if(bonePos == nil)then
+				print("ERROR: Bone pose does not have a position value. Must be in a wrong format.");
+				return;
+			end
+            
+			local newPos = GHUtils.pointFromString(bonePos);
+			
+			cbone:setPosition(newPos.x, newPos.y);
+		end
+	end
+	
+    self:transformSkins();
+
+--	//if(delegate)
+--	//{
+--  	//  delegate->didLoadPoseWithNameOnSkeleton(poseName, this);
+--	//}
+end
 
 
 
@@ -284,7 +440,7 @@ end
         
         local posesDict = dict.poses;
         if posesDict then
---            self.poses = GHDeepCopy(posesDict);
+            GHSkeleton.poses = GHUtils.GHDeepCopy(posesDict);
         end
     end
     
@@ -977,180 +1133,5 @@ function GHSkeleton:getLocalPositionY()
 
 
 
---]]
-
-
---[[
---------------------------------------------------------------------------------
---!@docBegin
---!Sets a pose onto the skeleton given the pose name.
---!@param poseName The name of the pose to be loaded.
-function GHSkeleton:setPoseWithName(poseName)
---!@docEnd
-	if(self.poses == null)
-	{
-		Ti.API.info("ERROR: Skeleton has no poses or poses were not publish.\n\n");
-		return;
-	}
-
-	var poseInfo =self.poses[poseName];
-	if(poseInfo == null){
-		Ti.API.info("\n\nERROR: Skeleton has no pose with name "+ poseName);
-		return;
-	}
-	
-	var visibility = poseInfo.visibility;
-	if(visibility == null)
-	{
-		Ti.API.info("\n\nERROR: Skeleton pose is in wrong format. Skin visibilities were not found.\n\n");
-		return;
-	}
-	
-	var zOrder = poseInfo.zOrder;
-	if(zOrder == null)
-	{
-		Ti.API.info("\n\nERROR: Skeleton pose is in wrong format. Skin z orders were not found.\n\n");
-		return;
-	}
-
-	var skinTex = poseInfo.skinTex;
-	if(skinTex == null)
-	{
-		Ti.API.info("\n\nERROR: Skeleton pose is in wrong format. Skin sprite frame names were not found.\n\n");
-		return;
-	}
-
-	var connections = poseInfo.connections;
-	if(connections == null)
-	{
-		Ti.API.info("\n\nERROR: Skeleton pose is in wrong format. Skin connections were not found.\n\n");
-		return;
-	}
-
-    var allBones = self.getAllBones();
-
-
-	for(var s = 0; s < self.skins.length; ++s)
-	{
-		var skin = self.skins[s];
-		if(skin)
-		{
-			skin.getSprite().show();
-			
-			var value = visibility[skin.getUUID()];
-			
-			if(value == false)
-			{
-				skin.getSprite().hide();
-			}
-			
-			var zValue = zOrder[skin.getUUID()];
-			if(zValue)
-			{
-				skin.getSprite.z = zValue;
-			}
-            
-			var spriteFrameName = skinTex[skin.getUUID()];
-			if(spriteFrameName)
-			{
-				skin.getSprite().selectFrame(spriteFrameName);
-			}
-			
-			
-			var connectionInfo = connections[skin.getUUID()];
-			if(connectionInfo)
-			{
-				//angleOff
-				//boneUUID //this may be missing if no connection
-				//conAngle
-				//posOff
-				
-				var boneUUID = connectionInfo.boneUUID;//["boneUUID"];
-				
-				if(boneUUID)
-				{
-					//check if the current bone is already our connection bone - if not, change it
-					if(!(skin.getBone() && skin.getBone().getUUID() == boneUUID))
-					{
-						for(var b = 0; b < allBones.length; ++b)
-						{
-							var bone = allBones[b];
-							if(bone)
-							{
-								if(bone.getUUID() == boneUUID)
-								{
-									skin.setBone(bone);
-									break;
-								}
-							}
-						}
-					}	
-				}
-				else{
-					skin.setBone(null);	
-				}
-				
-				var angleOff = connectionInfo.angleOff;
-				if(angleOff)
-				{
-					skin.setAngleOffset(angleOff);
-				}
-				
-				var posOff = connectionInfo.posOff;
-				if(posOff){
-					var pos = GHPointFromString(posOff);
-   					if (pos) {
-	 					skin.setPositionOffset(pos[0], pos[1]);
-					}
-				}
-				
-				var connectionAngle = connectionInfo.conAngle;
-				if(connectionAngle)
-				{
-					skin.setConnectionAngle(connectionAngle);
-				}
-			}
-		}
-    }
-  
-    var positions = poseInfo.positions;
-    if(positions == null)
-    {
-        Ti.API.info("\n\nERROR: Skeleton pose is in wrong format. Bone positions were not found.\n\n");
-        return;
-    }
-	
-	for(var j = 0; j < allBones.length; ++j)
-	{
-        var cbone = allBones[j];
-        if(cbone)
-		{
-			var uuid = cbone.getUUID();
-			if(uuid == null || uuid == "")
-			{
-				Ti.API.info("\n\nERROR: Bone has no UUID.\n\n");
-				return;
-			}
-			
-			var bonePos = positions[uuid];
-			if(bonePos == null)
-			{
-				Ti.API.info("\n\nERROR: Bone pose does not have a position value. Must be in a wrong format.\n\n");
-				return;
-			}
-            
-			var newPos = GHPointFromString(bonePos);
-			
-			cbone.setPosition(newPos[0], newPos[1]);
-		}
-	}
-	
-    self.transformSkins();
-
---	//if(delegate)
---	//{
---  	//  delegate->didLoadPoseWithNameOnSkeleton(poseName, this);
---	//}
-}
 --]]
 

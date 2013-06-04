@@ -339,7 +339,7 @@ function getSpriteSheetData()
 	return options
 end
 
-function getFrameForName(name)
+function getFrameNamesMap()
 	local frameIndexes =
 	{
 		["neck_outline.png"] = 1,
@@ -379,5 +379,13 @@ function getFrameForName(name)
 		["shoulder_L_outline.png"] = 35,
 		["forearm_L_outline.png"] = 36,
 	}
-	return frameIndexes[name];
+	return frameIndexes;
+end
+
+function getFramesCount()
+	return 36;
+end
+
+function getFrameForName(name)
+	return getFrameNamesMap()[name];
 end

@@ -220,10 +220,5 @@ function GHBoneSkin:transform()
 	self.sprite.x = originX + posOffsetX        ;--+ self.skeleton.x;
 	self.sprite.y = -1*(originY - posOffsetY)   ;--+ self.skeleton.y;
 	
-	--self.sprite.localPosX = self.sprite.x - self.skeleton.x;
-	--self.sprite.localPosY = self.sprite.y - self.skeleton.y;
-	
-	print("do we get to transform the sprite ");
-    
 	self.sprite.rotation = newAngle;
 end

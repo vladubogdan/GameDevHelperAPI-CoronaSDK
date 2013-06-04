@@ -16,6 +16,7 @@ local links = {
         {'Physics: Load physical sprites','physics_loadPhysicalSprites'},
         {'Physics: Collision Filtering','physics_collisionFiltering'},
         {'Skeletons: Load Skeleton and move bone','skeleton_loadSkeleton'},
+        {'Skeletons: Load Skeleton and set poses','skeleton_loadPoses'},
         
 --        {'Sprites: Load sprites using GameDevHelper API','Scene2'},
 --        {'Physics: Load physical sprites','Scene3'},
