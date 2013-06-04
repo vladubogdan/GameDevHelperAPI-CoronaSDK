@@ -13,7 +13,7 @@ GHBone = {}
 --!Creates a GHBone object.
 function GHBone:init()
 --!@docEnd
-
+    
 	local object = {m_rigid = false,
                     m_name = "",
                     m_uuid = "",
@@ -28,6 +28,7 @@ function GHBone:init()
 					}
 
 	setmetatable(object, { __index = GHBone })  -- Inheritance	
+    
 	return object
 end
 
@@ -294,7 +295,7 @@ end
 
 function GHBone:makeMove(parent, child, dist)
 
-	if child and child.getRigid() then
+	if child and child:getRigid() then
 	--do nothing
 	elseif parent then
 	
@@ -314,7 +315,7 @@ end
 function GHBone:move(father)
 
 	for i = 1, #self.neighbours do
-		local node = Self.neighbours[i];
+		local node = self.neighbours[i];
 		if node ~= father then
 		
 			node:makeMove(self, node, self.neighboursDistances[i]);

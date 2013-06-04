@@ -20,8 +20,12 @@ function jsonFileContent( filename, base )
 	-- create a file path for corona i/o
 	local path = system.pathForFile( filename, base )
 	
+    if path == nil then
+        return nil;
+    end
+    
 	-- will hold contents of file
-	local contents
+	local contents = nil;
 	
 	-- io.open opens a file at path. returns nil if no file found
 	local file = io.open( path, "r" )
@@ -106,6 +110,22 @@ function replaceOccuranceOfStringWithString( str, tofind, toreplace )
     tofind = tofind:gsub( "[%-%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%1" )
 	toreplace = toreplace:gsub( "%%", "%%%1" )
 	return ( str:gsub( tofind, toreplace ) )
+end
+
+--!@docBegin
+--!Returns the angle in radians
+--!@param angle A numeric value representing an angle in degrees.
+function GHDegreesToRadians(angle)
+--!@docEnd
+    return angle* 0.01745329252;
+end
+
+--!@docBegin
+--!Returns the angle in degrees
+--!@param angle A numeric value representing an angle in radians.
+function GHRadiansToDegrees(angle)
+--!@docEnd
+	return angle * 57.29577951; 
 end
 
 --!@docBegin

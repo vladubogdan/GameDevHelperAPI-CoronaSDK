@@ -4,9 +4,8 @@ require('GameDevHelperAPI.GHAffineTransform');
 local GHUtils = require('GameDevHelperAPI.GHUtils')
 
 --!@docBegin
---!This is a helper class that connects a bone to a sprite.
---! 
---!End users will probably never have to use this class directly.
+--!This is a helper class that connects a bone to a sprite. End users will probably never have to use this class directly.
+--!
 --!@docEnd
 
 GHBoneSkin = {}
@@ -138,7 +137,7 @@ function GHBoneSkin:setupTransformations( )
 		local currentPosX = self.sprite.localPosX;
 		local currentPosY = self.sprite.localPosY;
 		
-		local curAngle = self.sprite.angle;
+		local curAngle = self.sprite.rotation;
 		self.connectionAngle = curAngle;
 		
 		local posOffsetX = currentPosX - bonePointX;
@@ -157,7 +156,7 @@ end
 function GHBoneSkin:transform()
 --!@docEnd
 
-	if self.sprite ~= nil or self.bone ~= nil or self.skeleton ~= nil then
+	if self.sprite == nil or self.bone == nil or self.skeleton == nil then
         return;
     end
 	
@@ -176,7 +175,7 @@ function GHBoneSkin:transform()
 														bonePosY);
 														
 	local transform = GHAffineTransformRotate(GHAffineTransformMakeIdentity(), 
-											GHDegreesToRadians(degrees - self.angleOffset));
+											GHUtils.GHDegreesToRadians(degrees - self.angleOffset));
 	
 	local originX = 0.0;
 	local originY = 0.0;
@@ -185,7 +184,7 @@ function GHBoneSkin:transform()
 	local upwardY= -10.0;
 	 
 	local transform3 = GHAffineTransformRotate(GHAffineTransformMakeIdentity(), 
-						GHDegreesToRadians(degrees - self.angleOffset - self.connectionAngle));
+						                        GHUtils.GHDegreesToRadians(degrees - self.angleOffset - self.connectionAngle));
 	
 	local posOffset = GHPointApplyAffineTransform(posOffsetX, posOffsetY, transform3);
 	posOffsetX = posOffset.x;
@@ -218,12 +217,13 @@ function GHBoneSkin:transform()
 	local rootBone = self.skeleton:getRootBone();
 	
 
-	self.sprite.x = originX + posOffsetX - self.sprite.width*0.5        + self.skeleton:getPositionX();
-	self.sprite.y = -1*(originY - posOffsetY) - self.sprite.height*0.5  + self.skeleton:getPositionY();
+	self.sprite.x = originX + posOffsetX        ;--+ self.skeleton.x;
+	self.sprite.y = -1*(originY - posOffsetY)   ;--+ self.skeleton.y;
 	
-	self.sprite.localPosX = self.sprite.x - self.skeleton:getPositionX();
-	self.sprite.localPosY = self.sprite.y - self.skeleton:getPositionY();
+	--self.sprite.localPosX = self.sprite.x - self.skeleton.x;
+	--self.sprite.localPosY = self.sprite.y - self.skeleton.y;
 	
-	
-	self.sprite.rotate(newAngle);
+	print("do we get to transform the sprite ");
+    
+	self.sprite.rotation = newAngle;
 end

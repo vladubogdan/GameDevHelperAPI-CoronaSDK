@@ -125,6 +125,7 @@ function createWithFile(imageFilePath, spriteName, base)
     physicsPath = physicsPath .. fileName;
     -- set default base dir if none specified
     if not base then base = system.ResourceDirectory; end
+    print("physics path " ..physicsPath);
     local jsonContent = GHUtils.jsonFileContent(physicsPath, base);
     if(jsonContent)then
         local json = require "json"

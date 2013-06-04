@@ -1,12 +1,10 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
-require("GameDevHelperAPI.GHBone")
-require("GameDevHelperAPI.GHAffineTransform")
-require("GameDevHelperAPI.GHBoneSkin")
+local GHSkeleton = require("GameDevHelperAPI.GHSkeleton")
 
 --------------------------------------------
-local testCaseInfo = "Demonstrate loading a skeleton.\nWORK IN PROGRESS";
+local testCaseInfo = "Demonstrate loading a skeleton.\nTouch and drag to move the hand.";
 
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
@@ -19,9 +17,10 @@ function scene:createScene( event )
     localGroup = group;
 end
 
-local createdSprites = {}
+local skeleton = nil;
+
 local currentSprite = 1;
-local createSpriteAtLocation = function(x, y)
+local createSkeletonAtLocation = function(x, y)
 
     local spriteFrameNames = {
             "backpack", "banana", "bananabunch", "canteen", "hat", "pineapple", "statue" }
@@ -30,36 +29,34 @@ local createSpriteAtLocation = function(x, y)
     --YOU SHOULD LOOK AT config.lua to see how image suffixes are setup for dynamic content scaling.
 
     -- require the sprite sheet information file
-    local sheetInfo = require("Assets.loadSprites_spritesSheet"); --the folder "Assets" and the lua file exported by SpriteHelper "loadSprites_spritesSheet"
-    --create the image sheet
-    local imageSheet = graphics.newImageSheet( "Assets/loadSprites_spritesSheet.png", sheetInfo.getSpriteSheetData() );
+--    local sheetInfo = require("Assets.loadSprites_spritesSheet"); --the folder "Assets" and the lua file exported by SpriteHelper "loadSprites_spritesSheet"
+--    --create the image sheet
+--    local imageSheet = graphics.newImageSheet( "Assets/loadSprites_spritesSheet.png", sheetInfo.getSpriteSheetData() );
     --create the sprite
     
-    print("Did create sprite with name " .. spriteName .. " which has frame index " ..  sheetInfo.getFrameForName(spriteName));
-    local sprite = display.newImage(imageSheet, sheetInfo.getFrameForName(spriteName));
-    
-    localGroup:insert(sprite);
-    
-    sprite.x = x;
-    sprite.y = y;
+--    print("Did create sprite with name " .. spriteName .. " which has frame index " ..  sheetInfo.getFrameForName(spriteName));
+--    local sprite = display.newImage(imageSheet, sheetInfo.getFrameForName(spriteName));
     
     
+    skeleton = GHSkeleton.createWithFile("Assets/skeletons/Officer_Officer.json");
+    skeleton:setPosition(x, y);
+    localGroup:insert(skeleton);
     
-    --test case related code to change the sprite that will be created on next click
-    currentSprite = currentSprite+1;
-    if(currentSprite > #spriteFrameNames)then
-        currentSprite = 1;
-    end
-    createdSprites[#createdSprites+1] = sprite;
+    
 end
 
 
 local function onScreenTouch( event ) 
     if(event.phase == "began")then
-        createSpriteAtLocation(event.x, event.y);
+        if(skeleton == nil)then
+            createSkeletonAtLocation(event.x, event.y);
+        end
     end
     if(event.phase == "moved")then
-    
+        if(skeleton ~= nil)then
+            y = display.contentHeight - event.y;
+            skeleton:setPositionForBoneNamed(event.x, y, "rightHand");
+        end
     end
 end 
 
@@ -92,14 +89,8 @@ function scene:exitScene( event )
 	
     Runtime:removeEventListener( "touch", onScreenTouch); 
     
-    for i = 1, #createdSprites do
-       local spr = createdSprites[i];
-       
-       spr:removeSelf();
-    end
-    createdSprites = nil
-    createdSprites = {}
-    
+    skeleton:removeSelf();
+    skeleton = nil
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
