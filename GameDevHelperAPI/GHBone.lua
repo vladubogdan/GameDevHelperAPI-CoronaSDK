@@ -177,11 +177,11 @@ function GHBone:degrees()
 	local _father = self:getParent();
 	if _father then
 	
-		local curPointX = _father.getPositionX();
-		local curPointY = _father.getPositionY();
+		local curPointX = _father:getPositionX();
+		local curPointY = _father:getPositionY();
 		
-		local endPointX = self.getPositionX();
-		local endPointY = self.getPositionY();
+		local endPointX = self:getPositionX();
+		local endPointY = self:getPositionY();
 		
 		return (math.atan2( curPointY - endPointY, 
 							endPointX - curPointX)*180.0)/math.pi + 90.0;   
@@ -206,7 +206,7 @@ end
 
 --!@docBegin
 --!Get local Y position of the bone.
-function GHBone.getPositionY()
+function GHBone:getPositionY()
 --!@docEnd
 	return self.positionY;
 end

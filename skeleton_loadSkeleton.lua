@@ -3,6 +3,7 @@ local scene = storyboard.newScene()
 
 require("GameDevHelperAPI.GHBone")
 require("GameDevHelperAPI.GHAffineTransform")
+require("GameDevHelperAPI.GHBoneSkin")
 
 --------------------------------------------
 local testCaseInfo = "Demonstrate loading a skeleton.\nWORK IN PROGRESS";
