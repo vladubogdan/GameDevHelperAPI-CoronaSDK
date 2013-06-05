@@ -14,75 +14,107 @@ function getSpriteSheetData()
 					x = 1,
 					y = 1,
 					width = 46,
-					height = 69
+					height = 69,
+					sourceWidth = 52,
+					sourceHeight = 73,
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "ball"
 				{
-					x = 41,
-					y = 103,
+					x = 99,
+					y = 1,
 					width = 13,
-					height = 13
+					height = 13,
+					sourceWidth = 13,
+					sourceHeight = 13,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "backpack"
 				{
 					x = 1,
-					y = 71,
-					width = 40,
-					height = 48
+					y = 72,
+					width = 39,
+					height = 47,
+					sourceWidth = 44,
+					sourceHeight = 53,
+					sourceX = 2,
+					sourceY = 2
 				},
 
 
 				--FRAME "canteen"
 				{
-					x = 97,
-					y = 65,
+					x = 76,
+					y = 1,
 					width = 21,
-					height = 32
+					height = 32,
+					sourceWidth = 29,
+					sourceHeight = 39,
+					sourceX = 3,
+					sourceY = 3
 				},
 
 
 				--FRAME "pineapple"
 				{
-					x = 96,
+					x = 49,
 					y = 1,
 					width = 25,
-					height = 63
+					height = 62,
+					sourceWidth = 30,
+					sourceHeight = 66,
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "banana"
 				{
-					x = 48,
-					y = 1,
-					width = 41,
-					height = 28
+					x = 76,
+					y = 35,
+					width = 40,
+					height = 27,
+					sourceWidth = 45,
+					sourceHeight = 31,
+					sourceX = 2,
+					sourceY = 1
 				},
 
 
 				--FRAME "bananabunch"
 				{
-					x = 48,
-					y = 30,
-					width = 39,
-					height = 27
+					x = 42,
+					y = 99,
+					width = 38,
+					height = 27,
+					sourceWidth = 43,
+					sourceHeight = 32,
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "hat"
 				{
-					x = 42,
-					y = 71,
+					x = 49,
+					y = 65,
 					width = 54,
-					height = 32
+					height = 31,
+					sourceWidth = 61,
+					sourceHeight = 37,
+					sourceX = 3,
+					sourceY = 2
 				},
 
 		},
-		sheetContentWidth = 123,
-		sheetContentHeight = 121
+		sheetContentWidth = 117,
+		sheetContentHeight = 127
 	}
 	return options
 end

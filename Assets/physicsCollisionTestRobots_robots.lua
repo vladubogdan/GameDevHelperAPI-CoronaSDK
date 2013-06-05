@@ -11,33 +11,45 @@ function getSpriteSheetData()
 
 				--FRAME "blueRobot"
 				{
-					x = 1,
-					y = 1,
-					width = 55,
-					height = 67
+					x = 0,
+					y = 0,
+					width = 54,
+					height = 66,
+					sourceWidth = 65,
+					sourceHeight = 75,
+					sourceX = 5,
+					sourceY = 3
 				},
 
 
 				--FRAME "greenRobot"
 				{
-					x = 57,
-					y = 1,
-					width = 55,
-					height = 67
+					x = 56,
+					y = 0,
+					width = 54,
+					height = 66,
+					sourceWidth = 65,
+					sourceHeight = 75,
+					sourceX = 5,
+					sourceY = 3
 				},
 
 
 				--FRAME "pinkRobot"
 				{
-					x = 1,
-					y = 69,
-					width = 55,
-					height = 67
+					x = 0,
+					y = 68,
+					width = 54,
+					height = 66,
+					sourceWidth = 65,
+					sourceHeight = 75,
+					sourceX = 5,
+					sourceY = 3
 				},
 
 		},
-		sheetContentWidth = 114,
-		sheetContentHeight = 138
+		sheetContentWidth = 111,
+		sheetContentHeight = 135
 	}
 	return options
 end

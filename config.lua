@@ -6,9 +6,8 @@ application = {
 		fps = 30,
 		
 		imageSuffix = {
-		    ["-hd"] = 2,
-            ["-ipad"] = 2,
-            ["-ipadhd"] = 4,
+		    ["@2x"] = 2.0,
+            ["@4x"] = 4.0,
 		}
 	},
 }

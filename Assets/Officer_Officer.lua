@@ -14,16 +14,24 @@ function getSpriteSheetData()
 					x = 36,
 					y = 326,
 					width = 16,
-					height = 14
+					height = 13,
+					sourceWidth = 16,
+					sourceHeight = 13,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "hand_R_outline.png"
 				{
-					x = 19,
-					y = 281,
+					x = 18,
+					y = 280,
 					width = 17,
-					height = 18
+					height = 17,
+					sourceWidth = 17,
+					sourceHeight = 17,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -31,17 +39,25 @@ function getSpriteSheetData()
 				{
 					x = 1,
 					y = 146,
-					width = 34,
-					height = 25
+					width = 33,
+					height = 25,
+					sourceWidth = 33,
+					sourceHeight = 25,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "foot_LEFT.png"
 				{
-					x = 26,
-					y = 342,
-					width = 29,
-					height = 15
+					x = 25,
+					y = 341,
+					width = 28,
+					height = 14,
+					sourceWidth = 28,
+					sourceHeight = 14,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -50,7 +66,11 @@ function getSpriteSheetData()
 					x = 1,
 					y = 287,
 					width = 13,
-					height = 21
+					height = 20,
+					sourceWidth = 13,
+					sourceHeight = 20,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -58,17 +78,25 @@ function getSpriteSheetData()
 				{
 					x = 25,
 					y = 204,
-					width = 36,
-					height = 34
+					width = 35,
+					height = 34,
+					sourceWidth = 35,
+					sourceHeight = 34,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "handRest.png"
 				{
 					x = 1,
-					y = 261,
-					width = 16,
-					height = 24
+					y = 260,
+					width = 15,
+					height = 24,
+					sourceWidth = 19,
+					sourceHeight = 24,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -77,34 +105,50 @@ function getSpriteSheetData()
 					x = 11,
 					y = 329,
 					width = 18,
-					height = 8
+					height = 8,
+					sourceWidth = 18,
+					sourceHeight = 8,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "vest_outline.png"
 				{
 					x = 1,
-					y = 55,
-					width = 38,
-					height = 46
+					y = 54,
+					width = 37,
+					height = 46,
+					sourceWidth = 37,
+					sourceHeight = 46,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "muzzleFlash.png"
 				{
 					x = 1,
-					y = 325,
+					y = 324,
 					width = 8,
-					height = 16
+					height = 15,
+					sourceWidth = 8,
+					sourceHeight = 15,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "mouth.png"
 				{
 					x = 1,
-					y = 351,
-					width = 12,
-					height = 8
+					y = 350,
+					width = 11,
+					height = 8,
+					sourceWidth = 11,
+					sourceHeight = 8,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -112,35 +156,51 @@ function getSpriteSheetData()
 				{
 					x = 1,
 					y = 375,
-					width = 50,
-					height = 29
+					width = 49,
+					height = 28,
+					sourceWidth = 49,
+					sourceHeight = 28,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "eyes_CLOSED.png"
 				{
 					x = 37,
-					y = 312,
+					y = 311,
 					width = 18,
-					height = 13
+					height = 12,
+					sourceWidth = 18,
+					sourceHeight = 12,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "leg_lower_L_outline.png"
 				{
-					x = 39,
-					y = 143,
+					x = 38,
+					y = 142,
 					width = 20,
-					height = 33
+					height = 32,
+					sourceWidth = 20,
+					sourceHeight = 32,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "hand_L_outline.png"
 				{
-					x = 38,
+					x = 37,
 					y = 292,
-					width = 16,
-					height = 18
+					width = 15,
+					height = 17,
+					sourceWidth = 15,
+					sourceHeight = 17,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -149,7 +209,11 @@ function getSpriteSheetData()
 					x = 11,
 					y = 339,
 					width = 12,
-					height = 9
+					height = 9,
+					sourceWidth = 12,
+					sourceHeight = 9,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -158,7 +222,11 @@ function getSpriteSheetData()
 					x = 46,
 					y = 269,
 					width = 15,
-					height = 21
+					height = 21,
+					sourceWidth = 15,
+					sourceHeight = 21,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -167,7 +235,11 @@ function getSpriteSheetData()
 					x = 1,
 					y = 1,
 					width = 38,
-					height = 52
+					height = 51,
+					sourceWidth = 38,
+					sourceHeight = 51,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -176,7 +248,11 @@ function getSpriteSheetData()
 					x = 1,
 					y = 173,
 					width = 27,
-					height = 27
+					height = 27,
+					sourceWidth = 27,
+					sourceHeight = 27,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -185,25 +261,37 @@ function getSpriteSheetData()
 					x = 16,
 					y = 300,
 					width = 19,
-					height = 13
+					height = 12,
+					sourceWidth = 19,
+					sourceHeight = 12,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "foot_RIGHT.png"
 				{
-					x = 15,
-					y = 359,
-					width = 29,
-					height = 15
+					x = 14,
+					y = 358,
+					width = 28,
+					height = 14,
+					sourceWidth = 28,
+					sourceHeight = 14,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "tennisBall.png"
 				{
 					x = 1,
-					y = 310,
+					y = 309,
 					width = 13,
-					height = 13
+					height = 13,
+					sourceWidth = 13,
+					sourceHeight = 13,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -211,26 +299,38 @@ function getSpriteSheetData()
 				{
 					x = 41,
 					y = 1,
-					width = 19,
-					height = 37
+					width = 18,
+					height = 36,
+					sourceWidth = 18,
+					sourceHeight = 36,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "leg_upper_R_outline.png"
 				{
-					x = 39,
+					x = 38,
 					y = 106,
-					width = 23,
-					height = 35
+					width = 22,
+					height = 34,
+					sourceWidth = 22,
+					sourceHeight = 34,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "eyes_ANGRY.png"
 				{
 					x = 16,
-					y = 315,
+					y = 314,
 					width = 18,
-					height = 13
+					height = 12,
+					sourceWidth = 18,
+					sourceHeight = 12,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -238,8 +338,12 @@ function getSpriteSheetData()
 				{
 					x = 1,
 					y = 103,
-					width = 36,
-					height = 41
+					width = 35,
+					height = 41,
+					sourceWidth = 35,
+					sourceHeight = 41,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -248,16 +352,24 @@ function getSpriteSheetData()
 					x = 1,
 					y = 418,
 					width = 35,
-					height = 10
+					height = 10,
+					sourceWidth = 35,
+					sourceHeight = 10,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "handPoint.png"
 				{
 					x = 1,
-					y = 231,
+					y = 230,
 					width = 18,
-					height = 28
+					height = 28,
+					sourceWidth = 18,
+					sourceHeight = 28,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -265,8 +377,12 @@ function getSpriteSheetData()
 				{
 					x = 21,
 					y = 240,
-					width = 24,
-					height = 22
+					width = 23,
+					height = 22,
+					sourceWidth = 23,
+					sourceHeight = 22,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -274,8 +390,12 @@ function getSpriteSheetData()
 				{
 					x = 1,
 					y = 406,
-					width = 36,
-					height = 10
+					width = 35,
+					height = 10,
+					sourceWidth = 35,
+					sourceHeight = 10,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -283,8 +403,12 @@ function getSpriteSheetData()
 				{
 					x = 47,
 					y = 240,
-					width = 16,
-					height = 27
+					width = 15,
+					height = 26,
+					sourceWidth = 15,
+					sourceHeight = 26,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -293,48 +417,68 @@ function getSpriteSheetData()
 					x = 1,
 					y = 202,
 					width = 22,
-					height = 26
+					height = 26,
+					sourceWidth = 22,
+					sourceHeight = 26,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "leg_lower_R_outline.png"
 				{
-					x = 41,
+					x = 40,
 					y = 73,
 					width = 21,
-					height = 31
+					height = 31,
+					sourceWidth = 21,
+					sourceHeight = 31,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "handOpenBackHand.png"
 				{
 					x = 30,
-					y = 178,
+					y = 177,
 					width = 24,
-					height = 25
+					height = 24,
+					sourceWidth = 24,
+					sourceHeight = 24,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "shoulder_L_outline.png"
 				{
 					x = 41,
-					y = 40,
-					width = 22,
-					height = 31
+					y = 39,
+					width = 21,
+					height = 31,
+					sourceWidth = 21,
+					sourceHeight = 31,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "forearm_L_outline.png"
 				{
-					x = 19,
+					x = 18,
 					y = 264,
 					width = 25,
-					height = 14
+					height = 14,
+					sourceWidth = 25,
+					sourceHeight = 14,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 		},
-		sheetContentWidth = 67,
-		sheetContentHeight = 432
+		sheetContentWidth = 64,
+		sheetContentHeight = 429
 	}
 	return options
 end

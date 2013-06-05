@@ -119,8 +119,7 @@ function scene:enterScene( event )
 	local group = self.view
 	
 	physics.start()
-	physics.setDrawMode( "hybrid" ) 
-    
+	
     local leftWall  = display.newRect (-100, 0, 101, display.contentHeight)
     local rightWall = display.newRect (display.contentWidth, 0, 100, display.contentHeight)
     local ceiling   = display.newRect (0, -100, display.contentWidth, 101)
