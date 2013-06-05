@@ -394,6 +394,7 @@ end
 --!@param anim A GHSkeletalAnimation object.    
 function GHSkeleton:playAnimation(anim)
 --!@docEnd
+    self:stopAnimation();
     self.animation = nil;
     self.animation = anim;
 
@@ -406,14 +407,7 @@ function GHSkeleton:playAnimation(anim)
     self.firstEnterFrameCall = true;
     
     Runtime:addEventListener( "enterFrame", self )
-    
-    self.animatingInProgress = false;
-    
---    var myself = this;
---    function callUpdateMethod() {
---        myself.update();
---    }
-    --self.updateTimer = setInterval(callUpdateMethod, 1.0/30.0);
+    self.animatingInProgress = false;    
 end
 --------------------------------------------------------------------------------
 --!@docBegin
@@ -423,6 +417,37 @@ function GHSkeleton:stopAnimation()
     self.animation = nil;
     self.animatingInProgress = false;
     Runtime:removeEventListener( "enterFrame", self )
+end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!This will change or set an animation by transitioning each bone position
+--!to the new animation bone positions in the period of time specified.
+--! 
+--!You should only transition related animations. Like from walk, to shoot gun. Character pose should be similar in nature. 
+--! 
+--!Transitioning from a standing on a chair pose to a walking pose may lead to unrealistic behaviour. 
+--! 
+--!In such a case, you will need a "in between" animation. An animation that will make the character get up of the chair. When this "in between" animation finishes you will change to a new walking animation.  
+--!
+--!@param anim A GHSkeletalAnimation object
+--!@param time How much time the transition should take. A number value.
+function GHSkeleton:transitionToAnimationInTime(anim, time)
+--!@docEnd  
+    if(nil == anim)then
+        return;
+    end
+
+    local allBones = self:getAllBones();
+    
+    for i = 1, #allBones do
+        local bone = allBones[i];
+        bone:savePosition();
+    end
+    
+    self:playAnimation(anim);--this will also rmeove any previous transition time
+    
+    self.transitionTime = time;
+    self.currentTranstionTime = 0;
 end
 
 function GHSkeleton:enterFrame( event )
@@ -439,8 +464,6 @@ function GHSkeleton:enterFrame( event )
     local dt = event.time/1000 - self.lastTime;
     self.lastTime = event.time/1000;
 
-    --local dt = delta/1000.0;
-        
     local time = 0.0;
     
     
@@ -458,9 +481,10 @@ function GHSkeleton:enterFrame( event )
                  --   [delegate didFinishTransitionToAnimation:animation onSkeleton:self];
              --   }
             --}
+        else
+            time = self.currentTranstionTime;
+            self.currentTranstionTime = self.currentTranstionTime + dt;
         end
-        time = self.currentTranstionTime;
-        self.currentTranstionTime = self.currentTranstionTime + dt;
     else
         
         time = self.animation:getCurrentTime();
@@ -537,49 +561,49 @@ function GHSkeleton:enterFrame( event )
         
         if(self.transitionTime)then
         
---            var positionFrames = self.animation.getBonePositionFrames();
---            
---            if(positionFrames.length > 0)
---            {
---                beginFrame = positionFrames[0];
---            }
---            
---            var beginTime = 0;
---            var endTime = self.transitionTime;
---            
---            var framesTimeDistance = endTime - beginTime;
---            var timeUnit = (time - beginTime)/framesTimeDistance;//a value between 0 and 1
---            
---            var beginBonesInfo = beginFrame.getBonePositions();
---            
---            if(beginBonesInfo != null)
---            {
---                for(var b = 0; b < allBones.length; ++b)
---                {
---                    var bone = allBones[b];
---                
---                    var beginValue = beginBonesInfo[bone.getName()];
---                
---                    var beginPositionX = bone.getPreviousPositionX();
---                    var beginPositionY = bone.getPreviousPositionY();
---                
---                    var endPositionX = bone.getPositionX();
---                    var endPositionY = bone.getPositionY();
---                
---                    if(beginValue != null){
---                        endPositionX = beginValue[0];
---                        endPositionY = beginValue[1];
---                    }
---                
---                    //lets calculate the position of the bone based on the start - end and unit time
---                    var newX = beginPositionX + (endPositionX - beginPositionX)*timeUnit;
---                    var newY = beginPositionY + (endPositionY - beginPositionY)*timeUnit;
---            
---                    bone.setPosition(newX, newY);
---                }
---                self.transformSkins();
---                self.rootBone.updateMovement();
---            }
+            local positionFrames = self.animation:getBonePositionFrames();
+            
+            if(#positionFrames > 0)then
+                beginFrame = positionFrames[1];
+            end
+            
+            local beginTime = 0.0;
+            local endTime   = self.transitionTime;
+            
+            local framesTimeDistance = endTime - beginTime;
+            local timeUnit = (time - beginTime)/framesTimeDistance;--a value between 0 and 1
+            
+            local beginBonesInfo = beginFrame:getBonePositions();
+            
+            if(beginBonesInfo ~= nil)then
+            
+                for b = 1, #allBones do
+                
+                    local bone = allBones[b];
+                
+                    local beginValue = beginBonesInfo[bone:getName()];
+                
+                    local beginPositionX = bone:getPreviousPositionX();
+                    local beginPositionY = bone:getPreviousPositionY();
+                
+                    local endPositionX = bone:getPositionX();
+                    local endPositionY = bone:getPositionY();
+                
+                    if(beginValue ~= nil)then
+                        endPositionX = beginValue.x;
+                        endPositionY = beginValue.y;
+                    end
+                
+                    --lets calculate the position of the bone based on the start - end and unit time
+                    local newX = beginPositionX + (endPositionX - beginPositionX)*timeUnit;
+                    local newY = beginPositionY + (endPositionY - beginPositionY)*timeUnit;
+            
+                    bone:setPosition(newX, newY);
+                end
+                self:transformSkins();
+                self.rootBone:updateMovement();
+            end
+            
         elseif(beginFrame and endFrame)then
             local beginTime = beginFrame:getTime();
             local endTime = endFrame:getTime();
@@ -649,8 +673,8 @@ function GHSkeleton:enterFrame( event )
         end   
     end
     
-    if(self.transitionTime)then
-        time = 0;
+    if(self.transitionTime ~= nil)then
+        time = 0.0;
     end
     
     
@@ -928,6 +952,8 @@ end
 
 
 
+
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
     if dict ~= nil then
@@ -938,8 +964,6 @@ end
         path = GHUtils.replaceOccuranceOfStringWithString(path, "skeletons/", ""); --removes the "skeleton" folder
         
         local imgPath = path .. dict.sheet;
-        print("path " .. imgPath);
-        
         
         GHSkeleton:loadSprites(dict.sprites, imgPath);
         GHSkeleton:updateSkins();
@@ -955,36 +979,7 @@ end
 --[[
 
 
---------------------------------------------------------------------------------
---!@docBegin
---!This will change or set an animation by transitioning each bone position
---!to the new animation bone positions in the period of time specified.
---! 
---!You should only transition related animations. Like from walk, to shoot gun. Character pose should be similar in nature. 
---! 
---!Transitioning from a standing on a chair pose to a walking pose may lead to unrealistic behaviour. 
---! 
---!In such a case, you will need a "in between" animation. An animation that will make the character get up of the chair. When this "in between" animation finishes you will change to a new walking animation.  
---!
---!@param anim A GHSkeletalAnimation object
---!@param time How much time the transition should take. A number value.
-function GHSkeleton:transitionToAnimationInTime(anim, time)
---!@docEnd  
-    if(null == anim)return;
 
-    var allBones = self.getAllBones();
-    
-    for(var i = 0; i< allBones.length; ++i)
-    {
-        var bone = allBones[i];
-        bone.savePosition();
-    }
-    
-    self.playAnimation(anim);//this will also rmeove any previous transition time
-    
-    self.transitionTime = time;
-    self.currentTranstionTime = 0;
-}
 
 
 
