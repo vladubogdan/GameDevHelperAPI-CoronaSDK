@@ -5,7 +5,7 @@ local GHSkeleton = require("GameDevHelperAPI.GHSkeleton")
 require ("GameDevHelperAPI.GHSkeletalAnimation");
 
 --------------------------------------------
-local testCaseInfo = "Demonstrate loading a skeleton and changing poses.\nTouch to change pose.";
+local testCaseInfo = "Demonstrate loading a skeleton and animating.\nTouch to change animation.";
 
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
