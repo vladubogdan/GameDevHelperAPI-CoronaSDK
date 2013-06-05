@@ -163,9 +163,7 @@ function GHSkeleton:loadSprites(spritesInfo, spriteAtlastFileName)
 		end	
     end
 
-    --sort sprites in order of z
-    --self is actually a table
-    table.sort(self, function(a,b) return a.zOrder < b.zOrder end)
+    self:reorderSpritesBasedOnZOrder();
     
 end
 --------------------------------------------------------------------------------
@@ -353,10 +351,7 @@ function GHSkeleton:setPoseWithName(poseName)
 		end
     end
   
-    --sort sprites in order of z
-    --self is actually a table
-    table.sort(self, function(a,b) return a.zOrder < b.zOrder end)
-            
+    self:reorderSpritesBasedOnZOrder();        
 
     local positions = poseInfo.positions;
     if(positions == nil)then
@@ -693,10 +688,7 @@ function GHSkeleton:enterFrame( event )
             end
         end
     
-        --sort sprites in order of z
-        --self is actually a table
-        table.sort(self, function(a,b) return a.zOrder < b.zOrder end)
-    
+        self:reorderSpritesBasedOnZOrder();
     end
     
     do--handle skin connections
@@ -923,11 +915,14 @@ function GHSkeleton:enterFrame( event )
     self.currentTransitionTime = self.currentTransitionTime + dt;
 end
 
+function GHSkeleton:reorderSpritesBasedOnZOrder()
 
-
-
-
-
+    table.sort(self.sprites, function(a,b) return a.zOrder < b.zOrder end)
+    for s =1, #self.sprites do
+        local spr = self.sprites[s];
+        spr:toFront();
+    end
+end
 
 
 
