@@ -3,43 +3,15 @@ module (..., package.seeall)
 
 require('GameDevHelperAPI.GHBone');
 require('GameDevHelperAPI.GHBoneSkin');
+require('GameDevHelperAPI.GHSkeletalAnimation');
 local GHUtils = require('GameDevHelperAPI.GHUtils');
 local GHSprite =  require("GameDevHelperAPI.GHSprite");
 
---var GHSkeletalAnimation = require('GameDevHelperAPI/GHSkeletalAnimation').GHSkeletalAnimation;
---var GHSkeletalAnimationCache = require("GameDevHelperAPI/GHSkeletalAnimationCache").GHSkeletalAnimationCache;
 
 --!@docBegin
 --!GHSkeleton class is used to create skeletons as defined in SpriteHelper.
 --!
 --!@docEnd
-
---GHSkeleton = {}
-
-----!@docBegin
-----!Creates a GHSkeleton object.
---function GHSkeleton:init()
-----!@docEnd
---
---    local object = {rootBone = nil,
---                    poses = nil,--may be nil depending on publish settings
---                    skins = nil,--contains GHBoneSkin objects
---                    sprites = {},
---                    positionX = 0,
---                    positionY = 0,
---                    animation = nil,--combined animations currently not supported
---                    transitionTime = nil,--not nil only when transtioning to a new animation
---                    currentTranstionTime = 0.0,
---                    delegate = nil,
---                    lastTime = 0,
---                    animatingInProgress = false,
---                    updateTimer = nil
---					}
---
---	setmetatable(object, { __index = GHSkeleton })  -- Inheritance	
---	return object
---end
-
 
 
 --!@docBegin
@@ -67,8 +39,6 @@ function createWithFile(skeletonFileName, base)
 
 
 	local dict = nil;
-    
-    print("skeleton path " .. skeletonFileName);
     
     if not base then base = system.ResourceDirectory; end
     local jsonContent = GHUtils.jsonFileContent(skeletonFileName, base);
@@ -191,7 +161,12 @@ function GHSkeleton:loadSprites(spritesInfo, spriteAtlastFileName)
 				self:addSkin(GHBoneSkin:init():create(newSprite, nil, skinName, skinUUID, self));
 			end
 		end	
-	end
+    end
+
+    --sort sprites in order of z
+    --self is actually a table
+    table.sort(self, function(a,b) return a.zOrder < b.zOrder end)
+    
 end
 --------------------------------------------------------------------------------
 function GHSkeleton:addSkin(skin)
@@ -379,6 +354,7 @@ function GHSkeleton:setPoseWithName(poseName)
     end
   
     --sort sprites in order of z
+    --self is actually a table
     table.sort(self, function(a,b) return a.zOrder < b.zOrder end)
             
 
@@ -417,6 +393,541 @@ function GHSkeleton:setPoseWithName(poseName)
 --  	//  delegate->didLoadPoseWithNameOnSkeleton(poseName, this);
 --	//}
 end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Start an animation on the skeleton given the animation object.
+--!@param anim A GHSkeletalAnimation object.    
+function GHSkeleton:playAnimation(anim)
+--!@docEnd
+    self.animation = nil;
+    self.animation = anim;
+
+    self.currentTransitionTime = 0;
+    self.animation:setCurrentTime(0);
+    self.animation:setCurrentLoop(0);
+    
+    --self.lastTime = new Date();
+    self.lastTime = 0;
+    self.firstEnterFrameCall = true;
+    
+    Runtime:addEventListener( "enterFrame", self )
+    
+    self.animatingInProgress = false;
+    
+--    var myself = this;
+--    function callUpdateMethod() {
+--        myself.update();
+--    }
+    --self.updateTimer = setInterval(callUpdateMethod, 1.0/30.0);
+end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Stops the active skeleton animation and removes it from memory.
+function GHSkeleton:stopAnimation()
+--!@docEnd
+    self.animation = nil;
+    self.animatingInProgress = false;
+    Runtime:removeEventListener( "enterFrame", self )
+end
+
+function GHSkeleton:enterFrame( event )
+    
+    if(self.animation == nil)then
+        return;
+    end
+    
+    if(self.firstEnterFrameCall)then
+        self.lastTime = event.time/1000
+    	self.firstEnterFrameCall = false
+	end
+    
+    local dt = event.time/1000 - self.lastTime;
+    self.lastTime = event.time/1000;
+
+    --local dt = delta/1000.0;
+        
+    local time = 0.0;
+    
+    
+    if(self.transitionTime ~= nil)then
+        if(self.transitionTime < self.currentTransitionTime)then
+        
+            self.transitionTime = nil;
+            self.animation:setCurrentTime(dt);
+            self.animation:setCurrentLoop(0);
+            self.currentTransitionTime = 0;
+            time = dt;
+            
+            --if(delegate){
+               -- if([delegate respondsToSelector:@selector(didFinishTransitionToAnimation:onSkeleton:)]){
+                 --   [delegate didFinishTransitionToAnimation:animation onSkeleton:self];
+             --   }
+            --}
+        end
+        time = self.currentTranstionTime;
+        self.currentTranstionTime = self.currentTranstionTime + dt;
+    else
+        
+        time = self.animation:getCurrentTime();
+        if(self.animation:getReversed())then
+            self.animation:setCurrentTime(self.animation:getCurrentTime() - dt);
+        else
+            self.animation:setCurrentTime(self.animation:getCurrentTime() + dt);
+        end
+    end
+    
+    
+    if(self.animation:getReversed() and self.transitionTime == nil)then
+    
+        if(time <= 0)then
+            
+            local playMode = self.animation:getPlayMode();
+            if (playMode == 0 or playMode == 1) then --normal -- loop
+            
+                self.animation:setCurrentTime(self.animation:getTotalTime());    
+            
+            elseif playMode == 2 then -- ping pong
+            
+                self.animation:setCurrentTime(0);
+                self.animation:setReversed(false);
+                    
+            end
+            
+            self.animation:setCurrentLoop(self.animation:getCurrentLoop() + 1);
+        end
+    else
+        if(time >= self.animation:getTotalTime())then
+        
+            local playMode = self.animation:getPlayMode();
+            if(playMode == 0 or playMode == 1)then --normal -- loop
+                
+                self.animation:setCurrentTime(0);
+                     
+            elseif playMode ==2 then --ping pong
+                
+                self.animation:setCurrentTime(self.animation:getTotalTime());
+                self.animation:setReversed(true);
+                    
+            end
+            
+            self.animation:setCurrentLoop(self.animation:getCurrentLoop()+1);
+        end
+    end
+    
+    if(self.animation:getNumberOfLoops() ~= 0 and self.animation:getCurrentLoop() >= self.animation:getNumberOfLoops())then
+        self:stopAnimation();
+    end
+    
+    local allBones = self:getAllBones();
+    
+    
+    do--handle bone positions
+        
+        local beginFrame = nil;
+        local endFrame = nil;
+        
+        local bonePosFrames = self.animation:getBonePositionFrames();
+        for i = 1, #bonePosFrames do
+            local frm = bonePosFrames[i];
+            
+            if(frm:getTime() <= time)then
+                beginFrame = frm;
+            end
+            
+            if(frm:getTime() > time)then
+                endFrame = frm;
+                break;--exit for
+            end
+        end
+        
+        if(self.transitionTime)then
+        
+--            var positionFrames = self.animation.getBonePositionFrames();
+--            
+--            if(positionFrames.length > 0)
+--            {
+--                beginFrame = positionFrames[0];
+--            }
+--            
+--            var beginTime = 0;
+--            var endTime = self.transitionTime;
+--            
+--            var framesTimeDistance = endTime - beginTime;
+--            var timeUnit = (time - beginTime)/framesTimeDistance;//a value between 0 and 1
+--            
+--            var beginBonesInfo = beginFrame.getBonePositions();
+--            
+--            if(beginBonesInfo != null)
+--            {
+--                for(var b = 0; b < allBones.length; ++b)
+--                {
+--                    var bone = allBones[b];
+--                
+--                    var beginValue = beginBonesInfo[bone.getName()];
+--                
+--                    var beginPositionX = bone.getPreviousPositionX();
+--                    var beginPositionY = bone.getPreviousPositionY();
+--                
+--                    var endPositionX = bone.getPositionX();
+--                    var endPositionY = bone.getPositionY();
+--                
+--                    if(beginValue != null){
+--                        endPositionX = beginValue[0];
+--                        endPositionY = beginValue[1];
+--                    }
+--                
+--                    //lets calculate the position of the bone based on the start - end and unit time
+--                    var newX = beginPositionX + (endPositionX - beginPositionX)*timeUnit;
+--                    var newY = beginPositionY + (endPositionY - beginPositionY)*timeUnit;
+--            
+--                    bone.setPosition(newX, newY);
+--                }
+--                self.transformSkins();
+--                self.rootBone.updateMovement();
+--            }
+        elseif(beginFrame and endFrame)then
+            local beginTime = beginFrame:getTime();
+            local endTime = endFrame:getTime();
+            
+            local framesTimeDistance = endTime - beginTime;
+            local timeUnit = (time - beginTime)/framesTimeDistance;--a value between 0 and 1
+            
+            local beginBonesInfo = beginFrame:getBonePositions();
+            local endBonesInfo = endFrame:getBonePositions();
+            
+            if(nil == beginBonesInfo or nil == endBonesInfo)then
+                return;
+            end
+             
+            for b = 1, #allBones do
+                local bone = allBones[b];
+                if(bone)then
+                
+                    local beginValue   = beginBonesInfo[bone:getName()];
+                    local endValue     = endBonesInfo[bone:getName()];
+                    
+                    local beginPositionX = bone:getPositionX();
+                    local beginPositionY = bone:getPositionY();
+                    
+                    local endPositionX  = bone:getPositionX();
+                    local endPositionY  = bone:getPositionY();
+                    
+                    if(beginValue)then
+                        beginPositionX = beginValue.x;
+                        beginPositionY = beginValue.y;
+                    end
+                    
+                    if(endValue)then
+                        endPositionX = endValue.x;
+                        endPositionY = endValue.y;
+                    end
+                    
+                    --lets calculate the position of the bone based on the start - end and unit time
+                    local newX = beginPositionX + (endPositionX - beginPositionX)*timeUnit;
+                    local newY = beginPositionY + (endPositionY - beginPositionY)*timeUnit;
+                    
+                    bone:setPosition(newX, newY);
+                end
+            end      
+            self.rootBone:updateMovement();   
+        elseif(beginFrame)then
+        
+            local beginBonesInfo = beginFrame:getBonePositions();
+            for b = 1, #allBones do
+            
+                local bone = allBones[b];
+                
+                local beginValue = beginBonesInfo[bone:getName()];
+                
+                local beginPositionX = bone:getPositionX();
+                local beginPositionY = bone:getPositionY();
+                
+                if(beginValue)then
+                    beginPositionX = beginValue.x;
+                    beginPositionY = beginValue.y;
+                end
+                
+                bone:setPosition(beginPositionX, beginPositionY);
+                
+            end
+            self.rootBone:updateMovement();
+        end   
+    end
+    
+    if(self.transitionTime)then
+        time = 0;
+    end
+    
+    
+    do--handle sprites z order
+        
+        local beginFrame = nil
+        local spriteZOrderFrames = self.animation:getSpriteZOrderFrames();
+        for i = 1, #spriteZOrderFrames do
+            
+            local frm = spriteZOrderFrames[i];
+            if(frm:getTime() <= time)then
+                beginFrame = frm;
+            end
+        end
+        
+        --we have the last frame with smaller time
+        if(beginFrame)then
+        
+            local zOrderInfo = beginFrame:getSpritesZOrder();
+            
+            for s = 1, #self.sprites do
+            
+                local sprite = self.sprites[s];
+                if(sprite)then
+                
+                    local sprName = sprite.name;
+                    if(sprName)then
+                    
+                        local zNum = zOrderInfo[sprName];
+                        if(zNum)then
+                            sprite.zOrder = zNum;   
+                        end
+                    end
+                end
+            end
+        end
+    
+        --sort sprites in order of z
+        --self is actually a table
+        table.sort(self, function(a,b) return a.zOrder < b.zOrder end)
+    
+    end
+    
+    do--handle skin connections
+        
+        local beginFrame = nil;
+        local skinConnectionFrames = self.animation:getSkinConnectionFrames();
+        for i = 1, #skinConnectionFrames do
+            
+            local frm = skinConnectionFrames[i];
+            if(frm:getTime() <= time)then
+                beginFrame = frm;
+            end
+        end
+        
+        --we have the last frame with smaller time
+        if(beginFrame)then
+        
+            local connections = beginFrame:getSkinConnections();
+            
+            for s = 1, #self.skins do
+                
+                local skin = self.skins[s];
+                
+                local sprite = skin:getSprite();
+                
+                if(sprite)then
+                
+                    local sprName = sprite.name;
+                    if(sprName)then
+                    
+                        local connectionInfo = connections[sprName];
+                        if(connectionInfo)then
+                        
+                            local boneName = connectionInfo:getBoneName();
+                            
+                            skin:setAngleOffset(connectionInfo:getAngleOffset());
+                            skin:setPositionOffset(connectionInfo:getPositionOffsetX(), connectionInfo:getPositionOffsetY());
+                            skin:setConnectionAngle(connectionInfo:getConnectionAngle());
+                            
+                            if(boneName == "" or boneName == nil)then
+                                skin:setBone(nil);
+                            else
+                                for b = 1, #allBones do
+                                    
+                                    local bone = allBones[b];
+                                    if(bone:getName() == boneName)then
+                                        skin:setBone(bone);
+                                        break;
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    do--handle skin sprites
+        local beginFrame = nil;
+        local skinSpriteFrames = self.animation:getSkinSpriteFrames();
+        for s = 1, #skinSpriteFrames do
+        
+            local frm = skinSpriteFrames[s];
+            if(frm:getTime() <= time)then
+                beginFrame = frm;
+            end
+        end
+        
+        --we have the last frame with smaller time
+        if(beginFrame)then
+        
+            local info = beginFrame:getSkinSprites();
+            if(info)then
+            
+                for s = 1, #self.skins do
+                    local skin = self.skins[s];
+                    local newSprFrameName = info[skin:getName()];
+                    if(newSprFrameName)then
+                        skin:getSprite():setFrameName(newSprFrameName);
+                    end
+                end
+            end
+        end
+    end
+    
+    
+    do--handle sprites visibility
+        
+        local beginFrame = nil;
+        local visibilityFrames = self.animation:getVisibilityFrames();
+        for v = 1, #visibilityFrames do
+            local frm = visibilityFrames[v];
+            if(frm:getTime() <= time)then
+                beginFrame = frm;
+            end
+        end
+        
+        --we have the last frame with smaller time
+        if(beginFrame)then
+        
+            local info = beginFrame:getSpritesVisibility();
+            if(info)then
+            
+                for s = 1, #self.sprites do
+                
+                    local sprite = self.sprites[s];
+                    if(sprite)then
+                    
+                        local sprFrmName = sprite.name;
+                        if(sprFrmName ~= nil and sprFrmName ~= "")then
+                        
+                            local val = info[sprFrmName];
+                            
+                            if(val ~= nil and val == true)then
+                                sprite.isVisible = true;
+                            elseif(val ~= nil and val == false )then
+                                sprite.isVisible = false;
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    
+    do--handle sprites transform
+        
+        local beginFrame = nil;
+        local endFrame = nil;
+        
+        local spritesTransformFrames = self.animation:getSpritesTransformFrames();
+        for t = 1, #spritesTransformFrames do
+            
+            local frm = spritesTransformFrames[t];
+            if(frm:getTime() <= time)then
+                beginFrame = frm;
+            end
+            
+            if(frm:getTime() > time)then
+                endFrame = frm;
+                break;--exit for
+            end
+        end
+        
+        if(beginFrame and endFrame)then
+            
+            local beginTime = beginFrame:getTime();
+            local endTime = endFrame:getTime();
+            
+            local framesTimeDistance = endTime - beginTime;
+            local timeUnit = (time - beginTime)/framesTimeDistance;
+            
+            local beginFrameInfo = beginFrame:getSpritesTransform();
+            local endFrameInfo = endFrame:getSpritesTransform();
+            
+            if(beginFrameInfo == nil or endFrameInfo == nil)then
+                return;
+            end
+               
+            for sk = 1, #self.skins do
+            
+                local skin = self.skins[sk];
+                
+                local beginInfo = beginFrameInfo[skin:getName()];
+                local endInfo = endFrameInfo[skin:getName()];
+                
+                if(skin:getSprite() ~= nil and beginInfo ~= nil and endInfo ~= nil)then
+                    
+                    --set position
+                    local beginPosX = beginInfo:getPositionX();
+                    local beginPosY = beginInfo:getPositionY();
+                    
+                    local endPosX = endInfo:getPositionX();
+                    local endPosY = endInfo:getPositionY();
+                    
+                    local newX = beginPosX + (endPosX - beginPosX)*timeUnit;
+                    local newY = beginPosY + (endPosY - beginPosY)*timeUnit;
+                    
+                    skin:getSprite().x = newX       ;--+ self.positionX + skin.getSprite().width*0.5;
+                    skin:getSprite().y = -1.0*newY  ;--+ self.positionY + skin.getSprite().height*0.5;
+                    
+                    --set angle
+                    local beginAngle  = beginInfo:getAngle();
+                    local endAngle    = endInfo:getAngle();
+                    local newAngle    = beginAngle + (endAngle - beginAngle)*timeUnit;
+                    skin:getSprite().rotation = newAngle;
+                    
+                    --set angle at skin time
+                    local beginSkinAngle  = beginInfo:getConnectionAngle();
+                    local endSkinAngle    = endInfo:getConnectionAngle();
+                    local newSkinAngle    = beginSkinAngle + (endSkinAngle - beginSkinAngle)*timeUnit;
+                    skin:setConnectionAngle(newSkinAngle);
+                    
+                    do
+                        --set skin angle
+                        local beginAngle  = beginInfo:getAngleOffset();
+                        local endAngle    = endInfo:getAngleOffset();
+                        local newAngle    = beginAngle + (endAngle - beginAngle)*timeUnit;
+                        skin:setAngleOffset(newAngle);
+                        
+                        
+                        --set skin position offset
+                        local beginPosOffX = beginInfo:getPositionOffsetX();
+                        local beginPosOffY = beginInfo:getPositionOffsetY();
+                        
+                        local endPosOffX = endInfo:getPositionOffsetX();
+                        local endPosOffY = endInfo:getPositionOffsetY();
+                        
+                        local newX = beginPosOffX + (endPosOffX - beginPosOffX)*timeUnit;
+                        local newY = beginPosOffY + (endPosOffY - beginPosOffY)*timeUnit;
+                        
+                        skin:setPositionOffset(newX, newY);
+                    end
+                    skin:transform();
+                end
+            end
+        end
+    end
+
+    
+    self:transformSkins();
+    self.currentTransitionTime = self.currentTransitionTime + dt;
+end
+
+
+
+
+
+
 
 
 
@@ -447,29 +958,7 @@ end
     return GHSkeleton;
 end
 --[[
---------------------------------------------------------------------------------
---!@docBegin
---!Start an animation on the skeleton given the animation object.
---!@param anim A GHSkeletalAnimation object.    
-function GHSkeleton:playAnimation(anim)
---!@docEnd
-    self.animation = null;
-    self.animation = anim;
 
-    self.currentTransitionTime = 0;
-    self.animation.setCurrentTime(0);
-    self.animation.setCurrentLoop(0);
-    
-    self.lastTime = new Date();
-    
-    self.animatingInProgress = false;
-    
-    var myself = this;
-    function callUpdateMethod() {
-        myself.update();
-    }
-    self.updateTimer = setInterval(callUpdateMethod, 1.0/30.0);
-}
 
 --------------------------------------------------------------------------------
 --!@docBegin
@@ -502,15 +991,7 @@ function GHSkeleton:transitionToAnimationInTime(anim, time)
     self.currentTranstionTime = 0;
 }
 
---------------------------------------------------------------------------------
---!@docBegin
---!Stops the active skeleton animation and removes it from memory.
-function GHSkeleton:stopAnimation()
---!@docEnd
-    self.animation = null;
-    self.animatingInProgress = false;
-    clearInterval(self.updateTimer);
-}
+
 
 --------------------------------------------------------------------------------
 --!@docBegin
@@ -531,544 +1012,7 @@ pfunction GHSkeleton:playAnimationWithName(animName)
         }
     }
 }
-function GHSkeleton:update(self)
-{
-    if(self.animatingInProgress == true)
-        return;
-        
-    if(self.animation == null)
-    {
-        return;
-    }
-    
-    //we use this variable so that in case the update function is called while we are still changing frames we should ignore the call
-    self.animatingInProgress = true;
-    
-    var delta = new Date() - self.lastTime;
-    self.lastTime = new Date();
 
-    var dt = delta/1000.0;//deltaTime/1000.0; 
-    
-    var time = 0.0;
-    
-    
-    if(self.transitionTime != null)
-    {
-        if(self.transitionTime < self.currentTransitionTime)
-        {
-            self.transitionTime = null;
-            self.animation.setCurrentTime(dt);
-            self.animation.setCurrentLoop(0);
-            self.currentTransitionTime = 0;
-            time = dt;
-            
-            //if(delegate){
-               // if([delegate respondsToSelector:@selector(didFinishTransitionToAnimation:onSkeleton:)]){
-                 //   [delegate didFinishTransitionToAnimation:animation onSkeleton:self];
-             //   }
-            //}
-        }
-        time = self.currentTranstionTime;
-        self.currentTranstionTime += dt;
-    }
-    else{
-        
-        time = self.animation.getCurrentTime();
-        if(self.animation.getReversed()){
-            self.animation.setCurrentTime(self.animation.getCurrentTime() - dt);
-        }
-        else{
-            self.animation.setCurrentTime(self.animation.getCurrentTime() + dt);
-        }
-    }
-    
-    
-    if(self.animation.getReversed() && self.transitionTime == null)
-    {
-        if(time <= 0)
-        {
-            switch(self.animation.getPlayMode())
-            {
-                case 0: //normal
-                case 1: //loop
-                {
-                    self.animation.setCurrentTime(self.animation.getTotalTime());    
-                }
-                break;
-                
-                case 2: //ping pong
-                {
-                    self.animation.setCurrentTime(0);
-                    self.animation.setReversed(false);
-                }
-                break;
-                
-                default:
-                break;
-            }
-            
-            
-            self.animation.setCurrentLoop(self.animation.getCurrentLoop() + 1);
-        }
-        
-    }
-    else{
-        if(time >= self.animation.getTotalTime())
-        {
-            switch(self.animation.getPlayMode())
-            {
-                case 0://normal
-                case 1://loop
-                {
-                    self.animation.setCurrentTime(0);
-                }
-                break;
-                
-                case 2: //ping pong
-                {
-                    self.animation.setCurrentTime(self.animation.getTotalTime());
-                    self.animation.setReversed(true);
-                }
-                break;
-            }
-            
-            self.animation.setCurrentLoop(self.animation.getCurrentLoop()+1);
-            
-        }
-    }
-    
-    if(self.animation.getNumberOfLoops() != 0 && self.animation.getCurrentLoop() >= self.animation.getNumberOfLoops())
-    {
-        self.stopAnimation();
-    }
-    
-    var allBones = self.getAllBones();
-    
-    
-    {//handle bone positions
-        
-        var beginFrame = null
-        var endFrame = null;
-        
-        var bonePosFrames = self.animation.getBonePositionFrames();
-        for(var i = 0; i < bonePosFrames.length; ++i)
-        {
-            var frm = bonePosFrames[i];
-            
-            if(frm.getTime() <= time)
-            {
-                beginFrame = frm;
-            }
-            
-            if(frm.getTime() > time)
-            {
-                endFrame = frm;
-                break;//exit for
-            }
-        }
-        
-        if(self.transitionTime)
-        {
-            var positionFrames = self.animation.getBonePositionFrames();
-            
-            if(positionFrames.length > 0)
-            {
-                beginFrame = positionFrames[0];
-            }
-            
-            var beginTime = 0;
-            var endTime = self.transitionTime;
-            
-            var framesTimeDistance = endTime - beginTime;
-            var timeUnit = (time - beginTime)/framesTimeDistance;//a value between 0 and 1
-            
-            var beginBonesInfo = beginFrame.getBonePositions();
-            
-            if(beginBonesInfo != null)
-            {
-                for(var b = 0; b < allBones.length; ++b)
-                {
-                    var bone = allBones[b];
-                
-                    var beginValue = beginBonesInfo[bone.getName()];
-                
-                    var beginPositionX = bone.getPreviousPositionX();
-                    var beginPositionY = bone.getPreviousPositionY();
-                
-                    var endPositionX = bone.getPositionX();
-                    var endPositionY = bone.getPositionY();
-                
-                    if(beginValue != null){
-                        endPositionX = beginValue[0];
-                        endPositionY = beginValue[1];
-                    }
-                
-                    //lets calculate the position of the bone based on the start - end and unit time
-                    var newX = beginPositionX + (endPositionX - beginPositionX)*timeUnit;
-                    var newY = beginPositionY + (endPositionY - beginPositionY)*timeUnit;
-            
-                    bone.setPosition(newX, newY);
-                }
-                self.transformSkins();
-                self.rootBone.updateMovement();
-            }
-        }
-        else if(beginFrame && endFrame)
-        {
-            var beginTime = beginFrame.getTime();
-            var endTime = endFrame.getTime();
-            
-            var framesTimeDistance = endTime - beginTime;
-            var timeUnit = (time - beginTime)/framesTimeDistance;//a value between 0 and 1
-            
-            var beginBonesInfo = beginFrame.getBonePositions();
-            var endBonesInfo = endFrame.getBonePositions();
-            
-            if(null == beginBonesInfo || null == endBonesInfo){
-                return;
-            }
-             
-            for(var b = 0; b < allBones.length; ++b)
-            {
-                var bone = allBones[b];
-                if(bone)
-                {
-                var beginValue   = beginBonesInfo[bone.getName()];
-                var endValue     = endBonesInfo[bone.getName()];
-                
-                var beginPositionX = bone.getPositionX();
-                var beginPositionY = bone.getPositionY();
-                
-                var endPositionX  = bone.getPositionX();
-                var endPositionY  = bone.getPositionY();
-                
-                if(beginValue)
-                {
-                    beginPositionX = beginValue[0];
-                    beginPositionY = beginValue[1];
-                }
-                
-                if(endValue){
-                    endPositionX = endValue[0];
-                    endPositionY = endValue[1];
-                }
-                
-                //lets calculate the position of the bone based on the start - end and unit time
-                var newX = beginPositionX + (endPositionX - beginPositionX)*timeUnit;
-                var newY = beginPositionY + (endPositionY - beginPositionY)*timeUnit;
-                
-                bone.setPosition(newX, newY);
-                }
-            }       
-            self.rootBone.updateMovement();   
-        }
-        else if(beginFrame)
-        {
-            var beginBonesInfo = beginFrame.getBonePositions();
-            for(var b = 0; b < allBones.length; ++b)
-            {
-                var bone = allBones[b];
-                
-                var beginValue = beginBonesInfo[bone.getName()];
-                
-                var beginPositionX = bone.getPositionX();
-                var beginPositionY = bone.getPositionY();
-                
-                if(beginValue){
-                    beginPositionX = beginValue[0];
-                    beginPositionY = beginValue[1];
-                }
-                
-                bone.setPosition(beginPositionX, beginPositionY);
-                
-            }
-            self.rootBone.updateMovement();
-        }
-        
-    }
-    
-    if(self.transitionTime){
-        time = 0;
-    }
-    
-    
-    {//handle sprites z order
-        
-        var beginFrame = null
-        var spriteZOrderFrames = self.animation.getSpriteZOrderFrames();
-        for(var i = 0; i < spriteZOrderFrames.length; ++i)
-        {
-            var frm = spriteZOrderFrames[i];
-            if(frm.getTime() <= time){
-                beginFrame = frm;
-            }
-        }
-        
-        //we have the last frame with smaller time
-        if(beginFrame)
-        {
-            var zOrderInfo = beginFrame.getSpritesZOrder();
-            
-            for(var s = 0; s< self.sprites.length; ++s)
-            {
-                var sprite = self.sprites[s];
-                if(sprite)
-                {
-                    var sprName = sprite.name;
-                    if(sprName)
-                    {
-                        var zNum = zOrderInfo[sprName];
-                        if(zNum)
-                        {
-                            sprite.z = zNum;   
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    {//handle skin connections
-        
-        var beginFrame = null;
-        var skinConnectionFrames = self.animation.getSkinConnectionFrames();
-        for(var i = 0; i < skinConnectionFrames.length; ++i)
-        {
-            var frm = skinConnectionFrames[i];
-            if(frm.getTime() <= time)
-            {
-                beginFrame = frm;
-            }
-        }
-        
-        //we have the last frame with smaller time
-        if(beginFrame)
-        {
-            var connections = beginFrame.getSkinConnections();
-            
-            for(var s = 0; s < self.skins.length; ++s)
-            {
-                var skin = self.skins[s];
-                
-                var sprite = skin.getSprite();
-                
-                if(sprite)
-                {
-                    var sprName = sprite.name;
-                    if(sprName)
-                    {
-                        var connectionInfo = connections[sprName];
-                        if(connectionInfo)
-                        {
-                            var boneName = connectionInfo.getBoneName();
-                            
-                            skin.setAngleOffset(connectionInfo.getAngleOffset());
-                            skin.setPositionOffset(connectionInfo.getPositionOffsetX(), connectionInfo.getPositionOffsetY());
-                            skin.setConnectionAngle(connectionInfo.getConnectionAngle());
-                            
-                            if(boneName == "" || boneName == null)
-                            {
-                                skin.setBone(null);
-                            }
-                            else{
-                                
-                                for(var b = 0; b < allBones.length; ++b)
-                                {
-                                    var bone = allBones[b];
-                                    if(bone.getName() == boneName)
-                                    {
-                                        skin.setBone(bone);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-            }
-        }
-    }
-    
-    {//handle skin sprites
-        var beginFrame = null;
-        var skinSpriteFrames = self.animation.getSkinSpriteFrames();
-        for(var s = 0; s < skinSpriteFrames.length; ++s)
-        {
-            var frm = skinSpriteFrames[s];
-            if(frm.getTime() <= time)
-            {
-                beginFrame = frm;
-            }
-        }
-        
-        //we have the last frame with smaller time
-        if(beginFrame)
-        {
-            var info = beginFrame.getSkinSprites();
-            if(info)
-            {
-                for(var s = 0; s< self.skins.length; ++s)
-                {
-                    var skin = self.skins[s];
-                    var newSprFrameName = info[skin.getName()];
-                    if(newSprFrameName)
-                    {
-                        skin.getSprite().selectFrame(newSprFrameName);
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    {//handle sprites visibility
-        
-        var beginFrame = null;
-        var visibilityFrames = self.animation.getVisibilityFrames();
-        for(var v = 0; v < visibilityFrames.length; ++v)
-        {
-            var frm = visibilityFrames[v];
-            if(frm.getTime() <= time)
-            {
-                beginFrame = frm;
-            }
-        }
-        
-        //we have the last frame with smaller time
-        if(beginFrame)
-        {
-            var info = beginFrame.getSpritesVisibility();
-            if(info)
-            {
-                for(var s = 0; s < self.sprites.length; ++s)
-                {
-                    var sprite = self.sprites[s];
-                    if(sprite)
-                    {
-                        var sprFrmName = sprite.name;
-                        if(sprFrmName != null && sprFrmName != "")
-                        {
-                            var val = info[sprFrmName];
-                            
-                            if(typeof(val) != undefined && val == true)
-                            {
-                                sprite.show();
-                            }
-                            else if(typeof(val) != undefined && val == false ){
-                                sprite.hide();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    {//handle sprites transform
-        
-        var beginFrame = null;
-        var endFrame = null;
-        
-        var spritesTransformFrames = self.animation.getSpritesTransformFrames();
-        for(var t = 0; t < spritesTransformFrames.length; ++t)
-        {
-            var frm = spritesTransformFrames[t];
-            if(frm.getTime() <= time){
-                beginFrame = frm;
-            }
-            
-            if(frm.getTime() > time){
-                endFrame = frm;
-                break;//exit for
-            }
-        }
-        
-        if(beginFrame && endFrame){
-            
-            var beginTime = beginFrame.getTime();
-            var endTime = endFrame.getTime();
-            
-            var framesTimeDistance = endTime - beginTime;
-            var timeUnit = (time - beginTime)/framesTimeDistance;
-            
-            var beginFrameInfo = beginFrame.getSpritesTransform();
-            var endFrameInfo = endFrame.getSpritesTransform();
-            
-            if(beginFrameInfo == null || endFrameInfo == null)
-                return;
-                
-            for(var sk= 0; sk < self.skins.length; ++sk)
-            {
-                var skin = self.skins[sk];
-                
-                var beginInfo = beginFrameInfo[skin.getName()];
-                var endInfo = endFrameInfo[skin.getName()];
-                
-                
-                if(skin.getSprite() != null && beginInfo != null && endInfo != null)
-                {
-                    
-                    //set position
-                    var beginPosX = beginInfo.getPositionX();
-                    var beginPosY = beginInfo.getPositionY();
-                    
-                    var endPosX = endInfo.getPositionX();
-                    var endPosY = endInfo.getPositionY();
-                    
-                    var newX = beginPosX + (endPosX - beginPosX)*timeUnit;
-                    var newY = beginPosY + (endPosY - beginPosY)*timeUnit;
-                    
-                    skin.getSprite().x = newX       + self.positionX + skin.getSprite().width*0.5;
-                    skin.getSprite().y = -1.0*newY  + self.positionY + skin.getSprite().height*0.5;
-                    
-                    //set angle
-                    var beginAngle  = beginInfo.getAngle();
-                    var endAngle    = endInfo.getAngle();
-                    var newAngle    = beginAngle + (endAngle - beginAngle)*timeUnit;
-                    skin.getSprite().rotate(newAngle);
-                    
-                    //set angle at skin time
-                    var beginSkinAngle  = beginInfo.getConnectionAngle();
-                    var endSkinAngle    = endInfo.getConnectionAngle();
-                    var newSkinAngle    = beginSkinAngle + (endSkinAngle - beginSkinAngle)*timeUnit;
-                    skin.setConnectionAngle(newSkinAngle);
-                    
-                    {
-                        //set skin angle
-                        var beginAngle  = beginInfo.getAngleOffset();
-                        var endAngle    = endInfo.getAngleOffset();
-                        var newAngle    = beginAngle + (endAngle - beginAngle)*timeUnit;
-                        skin.setAngleOffset(newAngle);
-                        
-                        
-                        //set skin position offset
-                        var beginPosOffX = beginInfo.getPositionOffsetX();
-                        var beginPosOffY = beginInfo.getPositionOffsetY();
-                        
-                        var endPosOffX = endInfo.getPositionOffsetX();
-                        var endPosOffY = endInfo.getPositionOffsetY();
-                        
-                        var newX = beginPosOffX + (endPosOffX - beginPosOffX)*timeUnit;
-                        var newY = beginPosOffY + (endPosOffY - beginPosOffY)*timeUnit;
-                        
-                        skin.setPositionOffset(newX, newY);
-                    }
-                    skin.transform();
-                    
-                }
-            }
-        }
-        
-    }
-
-    
-    self.transformSkins();
-    self.currentTransitionTime += dt;
-    
-    self.animatingInProgress = false;
-}
 --]]
 
 --]]
