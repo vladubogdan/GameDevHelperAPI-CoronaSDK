@@ -948,8 +948,64 @@ function GHSkeleton:reorderSpritesBasedOnZOrder()
     end
 end
 
-
-
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Returns the X position of the skeleton.
+function GHSkeleton:getPositionX()
+--!@docEnd
+    return self.x;
+end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Returns the Y position of the skeleton.
+function GHSkeleton:getPositionY()
+--!@docEnd
+	return self.y;
+end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Returns true or false if skeleton is flipped on x axis.
+function GHSkeleton:getFlipX()
+--!@docEnd
+    if(self.xScale < 0)then
+        return true;
+    end
+    return false;
+end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Sets wheter the skeleton should be flipped on x axis.
+--!param val A bolean value.
+function GHSkeleton:setFlipX(val)
+--!@docEnd
+    if(val == true)then
+        self.xScale = -1.0
+    else
+        self.xScale = 1.0
+    end
+end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Returns true or false if skeleton is flipped on y axis.
+function GHSkeleton:getFlipY()
+--!@docEnd
+    if(self.yScale < 0)then
+        return true;
+    end
+    return false;
+end
+--------------------------------------------------------------------------------
+--!@docBegin
+--!Sets wheter the skeleton should be flipped on Y axis.
+--!param val A bolean value.
+function GHSkeleton:setFlipY(val)
+--!@docEnd
+    if(val == true)then
+        self.yScale = -1.0
+    else
+        self.yScale = 1.0
+    end
+end
 
 
 
@@ -1039,20 +1095,6 @@ pfunction GHSkeleton:playAnimationWithName(animName)
 --    
 --}
 
---------------------------------------------------------------------------------
---!@docBegin
---!Returns the X position of the skeleton.
-function GHSkeleton:getPositionX()
---!@docEnd
-	return self.positionX;
-}
---------------------------------------------------------------------------------
---!@docBegin
---!Returns the Y position of the skeleton.
-function GHSkeleton:getPositionY()
---!@docEnd
-	return self.positionY;
-}
 
 function GHSkeleton:getLocalPositionX()
 {

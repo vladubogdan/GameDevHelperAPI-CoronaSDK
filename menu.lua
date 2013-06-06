@@ -19,6 +19,7 @@ local links = {
         {'Skeletons: Load Skeleton and set poses','skeleton_loadPoses'},
         {'Skeletons: Load Skeleton and animate','skeleton_loadAnimation'},
         {'Skeletons: Transition from one animation to another','skeleton_animationTransition'},
+        {'Skeletons: Animate, move and flip','skeleton_animateMoveAndFlip'},
         
 --        {'Sprites: Load sprites using GameDevHelper API','Scene2'},
 --        {'Physics: Load physical sprites','Scene3'},
