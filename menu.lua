@@ -20,7 +20,8 @@ local links = {
         {'Skeletons: Load Skeleton and animate','skeleton_loadAnimation'},
         {'Skeletons: Transition from one animation to another','skeleton_animationTransition'},
         {'Skeletons: Animate, move and flip','skeleton_animateMoveAndFlip'},
-        
+        {'Sprite Sheet Animations - Corona SDK','spriteAnims_loadUsingCorona'},
+        {'Sprite Sheet Animations - GameDevHelper API','spriteAnims_loadUsingGDHAPI'},
 --        {'Sprites: Load sprites using GameDevHelper API','Scene2'},
 --        {'Physics: Load physical sprites','Scene3'},
 --        {'Physics: Collision Filtering','Scene4'},

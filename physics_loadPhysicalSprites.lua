@@ -50,7 +50,7 @@ local createSpriteAtLocation = function(x, y)
     local spriteName = spriteFrameNames[currentSprite];
     --YOU SHOULD LOOK AT config.lua to see how image suffixes are setup for dynamic content scaling.
 
-    local sprite = GHSprite.createWithFile("Assets/PhysicalSpritesObjects_Objects.png", spriteName);
+    local sprite = GHSprite.createSpriteWithFile("Assets/PhysicalSpritesObjects_Objects.png", spriteName);
     
     localGroup:insert(sprite);
     

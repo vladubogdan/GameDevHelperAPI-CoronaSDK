@@ -139,34 +139,34 @@ function scene:enterScene( event )
     group:insert(floor);
     
 
-    local blueRobot1 = GHSprite.createWithFile("Assets/physicsCollisionTestRobots_robots.png", "blueRobot");
+    local blueRobot1 = GHSprite.createSpriteWithFile("Assets/physicsCollisionTestRobots_robots.png", "blueRobot");
     localGroup:insert(blueRobot1);
     blueRobot1.x = 100;
     blueRobot1.y = 100;
     
-    local blueRobot2 = GHSprite.createWithFile("Assets/physicsCollisionTestRobots_robots.png", "blueRobot");
+    local blueRobot2 = GHSprite.createSpriteWithFile("Assets/physicsCollisionTestRobots_robots.png", "blueRobot");
     localGroup:insert(blueRobot2);
     blueRobot2.x = 200;
     blueRobot2.y = 100;
 
 
-    local greenRobot1 = GHSprite.createWithFile("Assets/physicsCollisionTestRobots_robots.png", "greenRobot");
+    local greenRobot1 = GHSprite.createSpriteWithFile("Assets/physicsCollisionTestRobots_robots.png", "greenRobot");
     localGroup:insert(greenRobot1);
     greenRobot1.x = 100;
     greenRobot1.y = 200;
     
-    local greenRobot2 = GHSprite.createWithFile("Assets/physicsCollisionTestRobots_robots.png", "greenRobot");
+    local greenRobot2 = GHSprite.createSpriteWithFile("Assets/physicsCollisionTestRobots_robots.png", "greenRobot");
     localGroup:insert(greenRobot2);
     greenRobot2.x = 200;
     greenRobot2.y = 200;
 
 
-    local pinkRobot1 = GHSprite.createWithFile("Assets/physicsCollisionTestRobots_robots.png", "pinkRobot");
+    local pinkRobot1 = GHSprite.createSpriteWithFile("Assets/physicsCollisionTestRobots_robots.png", "pinkRobot");
     localGroup:insert(pinkRobot1);
     pinkRobot1.x = 100;
     pinkRobot1.y = 300;
     
-    local pinkRobot2 = GHSprite.createWithFile("Assets/physicsCollisionTestRobots_robots.png", "pinkRobot");
+    local pinkRobot2 = GHSprite.createSpriteWithFile("Assets/physicsCollisionTestRobots_robots.png", "pinkRobot");
     localGroup:insert(pinkRobot2);
     pinkRobot2.x = 200;
     pinkRobot2.y = 300;

@@ -129,7 +129,7 @@ function GHSkeleton:loadSprites(spritesInfo, spriteAtlastFileName)
 		
 		if sprName then
 		
-            local newSprite = GHSprite.createWithFile(spriteAtlastFileName, sprName);
+            local newSprite = GHSprite.createSpriteWithFile(spriteAtlastFileName, sprName);
 			
 			newSprite.name = skinName;
 			newSprite.zOrder = i;
