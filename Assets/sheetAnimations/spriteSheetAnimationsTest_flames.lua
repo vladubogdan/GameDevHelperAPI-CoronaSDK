@@ -17,8 +17,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 13,
 					sourceHeight = 19,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 
@@ -30,8 +30,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 12,
 					sourceHeight = 19,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 
@@ -43,8 +43,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 12,
 					sourceHeight = 19,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 
@@ -56,8 +56,8 @@ function getSpriteSheetData()
 					height = 18,
 					sourceWidth = 10,
 					sourceHeight = 18,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 
@@ -69,8 +69,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 12,
 					sourceHeight = 19,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 
@@ -82,8 +82,8 @@ function getSpriteSheetData()
 					height = 18,
 					sourceWidth = 13,
 					sourceHeight = 18,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 
@@ -95,8 +95,8 @@ function getSpriteSheetData()
 					height = 18,
 					sourceWidth = 11,
 					sourceHeight = 18,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 
@@ -108,8 +108,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 9,
 					sourceHeight = 19,
-					sourceX = 0,
-					sourceY = 0
+					sourceX = 0.000000,
+					sourceY = 0.000000
 				},
 
 		},

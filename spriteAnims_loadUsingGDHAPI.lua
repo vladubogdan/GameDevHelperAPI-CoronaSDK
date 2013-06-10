@@ -21,17 +21,23 @@ function scene:createScene( event )
 end
 
 local createdSprites = {}
+local currentAnim = 1;
 local createSpriteAnimationAtLocation = function(x, y)
 
     --YOU SHOULD LOOK AT config.lua to see how image suffixes are setup for dynamic content scaling.
 
+    local animNames = {"NumbersAnim", "fireAnim", "blinkingAnim"}
+
+
     local GHSprite = require("GameDevHelperAPI.GHSprite");
     local animatedSprite = GHSprite.createAnimatedSpriteWithFile(  "Assets/sheetAnimations/spriteSheetAnimationsTest_SheetAnimations.json", 
-                                                         {"NumbersAnim", "fireAnim"});
+                                                         {"NumbersAnim", "fireAnim", "blinkingAnim"});
     
     
     localGroup:insert(animatedSprite);
-    animatedSprite:prepareAnimationNamed("NumbersAnim");
+    --here for testing purposes we set up a different animation to play
+    local animToPlay = animNames[currentAnim];
+    animatedSprite:prepareAnimationNamed(animToPlay);
     animatedSprite:playAnimation();
     
     --demonstrate how to register for frame change notifications
@@ -69,6 +75,12 @@ local createSpriteAnimationAtLocation = function(x, y)
     animatedSprite.x = x;
     animatedSprite.y = y;
     createdSprites[#createdSprites+1] = animatedSprite;
+    
+    --test case related code to change the sprite that will be created on next click
+    currentAnim = currentAnim+1;
+    if(currentAnim > #animNames)then
+        currentAnim = 1;
+    end
 end
 
 

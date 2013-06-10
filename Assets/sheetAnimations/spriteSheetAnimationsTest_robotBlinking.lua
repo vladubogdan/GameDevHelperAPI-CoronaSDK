@@ -11,32 +11,24 @@ function getSpriteSheetData()
 
 				--FRAME "robotEyesClose.png"
 				{
-					x = 0,
-					y = 0,
-					width = 72,
-					height = 88,
-					sourceWidth = 100,
-					sourceHeight = 100,
-					sourceX = 10,
-					sourceY = 4
+					x = 1,
+					y = 1,
+					width = 100,
+					height = 100,
 				},
 
 
 				--FRAME "robotEyesOpen.png"
 				{
-					x = 0,
-					y = 90,
-					width = 72,
-					height = 88,
-					sourceWidth = 100,
-					sourceHeight = 100,
-					sourceX = 10,
-					sourceY = 4
+					x = 1,
+					y = 103,
+					width = 100,
+					height = 100,
 				},
 
 		},
-		sheetContentWidth = 73,
-		sheetContentHeight = 179
+		sheetContentWidth = 102,
+		sheetContentHeight = 204
 	}
 	return options
 end

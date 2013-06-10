@@ -17,8 +17,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 4,
-					sourceY = 1
+					sourceX = 4.000000,
+					sourceY = 1.750000
 				},
 
 
@@ -30,8 +30,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 2,
-					sourceY = 1
+					sourceX = 2.750000,
+					sourceY = 1.500000
 				},
 
 
@@ -43,8 +43,8 @@ function getSpriteSheetData()
 					height = 20,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 2,
-					sourceY = 1
+					sourceX = 2.500000,
+					sourceY = 1.500000
 				},
 
 
@@ -56,8 +56,8 @@ function getSpriteSheetData()
 					height = 20,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 2,
-					sourceY = 1
+					sourceX = 2.500000,
+					sourceY = 1.500000
 				},
 
 
@@ -69,8 +69,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 2,
-					sourceY = 1
+					sourceX = 2.250000,
+					sourceY = 1.750000
 				},
 
 
@@ -82,8 +82,8 @@ function getSpriteSheetData()
 					height = 20,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 3,
-					sourceY = 1
+					sourceX = 3.000000,
+					sourceY = 1.500000
 				},
 
 
@@ -95,8 +95,8 @@ function getSpriteSheetData()
 					height = 20,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 3,
-					sourceY = 1
+					sourceX = 3.250000,
+					sourceY = 1.750000
 				},
 
 
@@ -108,8 +108,8 @@ function getSpriteSheetData()
 					height = 20,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 2,
-					sourceY = 1
+					sourceX = 2.500000,
+					sourceY = 1.500000
 				},
 
 
@@ -121,8 +121,8 @@ function getSpriteSheetData()
 					height = 19,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 3,
-					sourceY = 1
+					sourceX = 3.250000,
+					sourceY = 1.750000
 				},
 
 
@@ -134,8 +134,8 @@ function getSpriteSheetData()
 					height = 20,
 					sourceWidth = 19,
 					sourceHeight = 23,
-					sourceX = 2,
-					sourceY = 1
+					sourceX = 2.500000,
+					sourceY = 1.500000
 				},
 
 		},
