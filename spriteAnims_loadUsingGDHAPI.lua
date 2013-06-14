@@ -34,12 +34,14 @@ local createSpriteAnimationAtLocation = function(x, y)
 
     local GHSprite = require("GameDevHelperAPI.GHSprite");
     local animatedSprite = GHSprite.createAnimatedSpriteWithFile(  "Assets/sheetAnimations/spriteSheetAnimationsTest_SheetAnimations.json", 
-                                                         {"NumbersAnim", "fireAnim", "blinkingAnim"});
+                                                         {"NumbersAnim", "fireAnim", "blinkingAnim", "trimAnim"});
     
     
     localGroup:insert(animatedSprite);
     --here for testing purposes we set up a different animation to play
     local animToPlay = animNames[currentAnim];
+    animToPlay = "trimAnim";
+    
     animatedSprite:prepareAnimationNamed(animToPlay);
     animatedSprite:playAnimation();
     
