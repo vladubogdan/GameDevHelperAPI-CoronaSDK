@@ -1,5 +1,42 @@
 {
   "animations" : {
+    "blinkingAnim" : {
+      "spriteSheet" : "spriteSheetAnimationsTest_robotBlinking",
+      "loops" : 1,
+      "randomReplay" : true,
+      "minRandomTime" : 1.1,
+      "frames" : [
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 6,
+          "notification" : {
+
+          },
+          "spriteframe" : "robotEyesOpen.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "robotEyesClose.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 4,
+          "notification" : {
+
+          },
+          "spriteframe" : "robotEyesOpen.png"
+        }
+      ],
+      "restoreOriginalFrame" : false,
+      "delayPerUnit" : 0.1,
+      "randomFrames" : false,
+      "loop" : true,
+      "maxRandomTime" : 1.1
+    },
     "fireAnim" : {
       "spriteSheet" : "spriteSheetAnimationsTest_flames",
       "loops" : 1,
@@ -76,43 +113,6 @@
       "randomFrames" : true,
       "loop" : true,
       "maxRandomTime" : 0.1
-    },
-    "blinkingAnim" : {
-      "spriteSheet" : "spriteSheetAnimationsTest_robotBlinking",
-      "loops" : 1,
-      "randomReplay" : true,
-      "minRandomTime" : 1.1,
-      "frames" : [
-        {
-          "offset" : "{0, 0}",
-          "delayUnits" : 6,
-          "notification" : {
-
-          },
-          "spriteframe" : "robotEyesOpen.png"
-        },
-        {
-          "offset" : "{0, 0}",
-          "delayUnits" : 1,
-          "notification" : {
-
-          },
-          "spriteframe" : "robotEyesClose.png"
-        },
-        {
-          "offset" : "{0, 0}",
-          "delayUnits" : 4,
-          "notification" : {
-
-          },
-          "spriteframe" : "robotEyesOpen.png"
-        }
-      ],
-      "restoreOriginalFrame" : false,
-      "delayPerUnit" : 0.1,
-      "randomFrames" : false,
-      "loop" : true,
-      "maxRandomTime" : 1.1
     },
     "NumbersAnim" : {
       "spriteSheet" : "spriteSheetAnimationsTest_Numbers",
@@ -207,6 +207,115 @@
       "delayPerUnit" : 1,
       "randomFrames" : false,
       "loop" : true,
+      "maxRandomTime" : 0.1
+    },
+    "trimAnim" : {
+      "spriteSheet" : "spriteSheetAnimationsTest_SHText",
+      "loops" : 1,
+      "randomReplay" : false,
+      "minRandomTime" : 0.1,
+      "frames" : [
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_1.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_2.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_3.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_4.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_5.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_6.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_7.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_8.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_9.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_10.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_11.png"
+        },
+        {
+          "offset" : "{0, 0}",
+          "delayUnits" : 1,
+          "notification" : {
+
+          },
+          "spriteframe" : "TrimAnimation_12.png"
+        }
+      ],
+      "restoreOriginalFrame" : false,
+      "delayPerUnit" : 0.1,
+      "randomFrames" : false,
+      "loop" : false,
       "maxRandomTime" : 0.1
     }
   },

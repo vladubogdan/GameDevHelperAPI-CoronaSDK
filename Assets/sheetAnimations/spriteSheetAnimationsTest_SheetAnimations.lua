@@ -13,6 +13,12 @@ function getSequenceData()
 			loopCount = 0
 		},
 		{
+			name = "trimAnim",
+			frames={1, 6, 11, 7, 5, 8, 10, 2, 4, 9, 12, 3, },
+			time=1000.000015,
+			loopCount = 1
+		},
+		{
 			name = "fireAnim",
 			frames={7, 3, 8, 4, 1, 5, 2, 6, },
 			time=1000.000015,

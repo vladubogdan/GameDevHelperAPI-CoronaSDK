@@ -29,6 +29,9 @@ local createSpriteAnimationAtLocation = function(x, y)
     local animNames = {"NumbersAnim", "fireAnim", "blinkingAnim"}
 
 
+--because of how content scaling is handled by Corona. (@2x.lua @4x.lua are never read by Corona) certain trimmed animation my not play correctly.
+--Im working with Corona team to resolve this issue.
+
     local GHSprite = require("GameDevHelperAPI.GHSprite");
     local animatedSprite = GHSprite.createAnimatedSpriteWithFile(  "Assets/sheetAnimations/spriteSheetAnimationsTest_SheetAnimations.json", 
                                                          {"NumbersAnim", "fireAnim", "blinkingAnim"});

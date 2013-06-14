@@ -11,131 +11,131 @@ function getSpriteSheetData()
 
 				--FRAME "number_1.png"
 				{
-					x = 16,
-					y = 63,
-					width = 12,
-					height = 19,
-					sourceWidth = 19,
+					x = 17,
+					y = 64,
+					width = 13,
+					height = 20,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 4.000000,
-					sourceY = 1.750000
+					sourceX = 4,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_2.png"
 				{
-					x = 0,
+					x = 1,
 					y = 106,
 					width = 15,
-					height = 19,
-					sourceWidth = 19,
+					height = 20,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 2.750000,
-					sourceY = 1.500000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_8.png"
 				{
-					x = 0,
-					y = 42,
+					x = 1,
+					y = 43,
 					width = 15,
 					height = 20,
-					sourceWidth = 19,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 2.500000,
-					sourceY = 1.500000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_0.png"
 				{
-					x = 0,
-					y = 63,
+					x = 1,
+					y = 64,
 					width = 15,
 					height = 20,
-					sourceWidth = 19,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 2.500000,
-					sourceY = 1.500000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_4.png"
 				{
-					x = 0,
-					y = 0,
+					x = 1,
+					y = 1,
 					width = 16,
-					height = 19,
-					sourceWidth = 19,
+					height = 20,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 2.250000,
-					sourceY = 1.750000
+					sourceX = 2,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_3.png"
 				{
 					x = 17,
-					y = 21,
-					width = 14,
+					y = 22,
+					width = 15,
 					height = 20,
-					sourceWidth = 19,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 3.000000,
-					sourceY = 1.500000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_5.png"
 				{
-					x = 17,
-					y = 0,
+					x = 18,
+					y = 1,
 					width = 14,
 					height = 20,
-					sourceWidth = 19,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 3.250000,
-					sourceY = 1.750000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_9.png"
 				{
-					x = 0,
+					x = 1,
 					y = 85,
 					width = 15,
 					height = 20,
-					sourceWidth = 19,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 2.500000,
-					sourceY = 1.500000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_7.png"
 				{
-					x = 16,
-					y = 42,
-					width = 14,
-					height = 19,
-					sourceWidth = 19,
+					x = 17,
+					y = 43,
+					width = 15,
+					height = 20,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 3.250000,
-					sourceY = 1.750000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 
 				--FRAME "number_6.png"
 				{
-					x = 0,
+					x = 1,
 					y = 21,
-					width = 15,
+					width = 16,
 					height = 20,
-					sourceWidth = 19,
+					sourceWidth = 20,
 					sourceHeight = 23,
-					sourceX = 2.500000,
-					sourceY = 1.500000
+					sourceX = 3,
+					sourceY = 2
 				},
 
 		},

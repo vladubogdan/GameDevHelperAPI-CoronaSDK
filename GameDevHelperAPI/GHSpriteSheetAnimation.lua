@@ -36,12 +36,12 @@ function GHSpriteSheetAnimation:createWithDictionary(animDict, animName)
                     frames = {},
                     frameNamesMap = nil,
                     delayPerUnit = animDict.delayPerUnit,
-                    loops = animDict.loops,
                     randomReplay = animDict.randomReplay,
                     minRandomTime = animDict.minRandomTime,
                     maxRandomTime = animDict.maxRandomTime,
                     restoreOriginalFrame = animDict.restoreOriginalFrame,
                     randomFrames = animDict.randomFrames,
+                    repetitions = animDict.loops,
                     currentFrameIdx = 1,
                     loop = animDict.loop,
                     activeFrame = nil,
@@ -223,6 +223,9 @@ function sequenceDataAndImageSheetForAnimations( animationSequenceNames, sheetPa
         
         local animName = animationSequenceNames[i];
         local animInfo = animations[animName];
+        if(animInfo == nil)then
+            return nil;
+        end
         local sprSheet = animInfo.spriteSheet;
         local imageFilePath = sheetPath .. sprSheet .. ".png";
             

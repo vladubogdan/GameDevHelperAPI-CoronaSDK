@@ -13,25 +13,25 @@ function getSpriteSheetData()
 				{
 					x = 1,
 					y = 1,
-					width = 13,
+					width = 14,
 					height = 19,
-					sourceWidth = 13,
+					sourceWidth = 14,
 					sourceHeight = 19,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "flame6.png"
 				{
-					x = 16,
-					y = 21,
-					width = 12,
+					x = 17,
+					y = 22,
+					width = 13,
 					height = 19,
-					sourceWidth = 12,
+					sourceWidth = 13,
 					sourceHeight = 19,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -39,51 +39,51 @@ function getSpriteSheetData()
 				{
 					x = 1,
 					y = 22,
-					width = 12,
+					width = 13,
 					height = 19,
-					sourceWidth = 12,
+					sourceWidth = 13,
 					sourceHeight = 19,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "flame3.png"
 				{
 					x = 1,
-					y = 63,
-					width = 10,
-					height = 18,
-					sourceWidth = 10,
-					sourceHeight = 18,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					y = 64,
+					width = 11,
+					height = 19,
+					sourceWidth = 11,
+					sourceHeight = 19,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "flame5.png"
 				{
-					x = 15,
-					y = 42,
+					x = 16,
+					y = 43,
 					width = 12,
 					height = 19,
 					sourceWidth = 12,
 					sourceHeight = 19,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "flame7.png"
 				{
-					x = 16,
+					x = 17,
 					y = 1,
 					width = 13,
-					height = 18,
+					height = 19,
 					sourceWidth = 13,
-					sourceHeight = 18,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					sourceHeight = 19,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
@@ -92,24 +92,24 @@ function getSpriteSheetData()
 					x = 1,
 					y = 43,
 					width = 11,
-					height = 18,
+					height = 19,
 					sourceWidth = 11,
-					sourceHeight = 18,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					sourceHeight = 19,
+					sourceX = 0,
+					sourceY = 0
 				},
 
 
 				--FRAME "flame2.png"
 				{
-					x = 13,
-					y = 63,
+					x = 14,
+					y = 64,
 					width = 9,
 					height = 19,
 					sourceWidth = 9,
 					sourceHeight = 19,
-					sourceX = 0.000000,
-					sourceY = 0.000000
+					sourceX = 0,
+					sourceY = 0
 				},
 
 		},

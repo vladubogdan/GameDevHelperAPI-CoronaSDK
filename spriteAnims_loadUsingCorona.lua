@@ -36,6 +36,7 @@ local createSpriteAnimationAtLocation = function(x, y)
     
     local animation = display.newSprite( imageSheet, numbersAnimSequenceData )
     
+    
     localGroup:insert(animation);
     animation:play()
     animation.x = x;
