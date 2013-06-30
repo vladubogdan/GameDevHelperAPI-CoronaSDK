@@ -26,7 +26,7 @@ Visit <a href="http://www.gamedevhelper.com">Game dev Helper.com</a> for detaile
 <br>
 
 
-You can also find detailed informations on the official <a href="http://www.gamedevhelper.com">documentation page</a>.
+You can also find detailed informations on the official <a href="http://www.gamedevhelper.com/apps/SpriteHelper/documentation/index.html">documentation page</a>.
 <br>
 
 If you need help with the project, please <a href="http://www.gamedevhelper.com/contact/" target="_blank">contact me</a>.
